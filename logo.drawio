@@ -1,0 +1,19 @@
+<mxfile host="737018bd-025f-47a8-821b-530e339c2a21" modified="2020-09-12T20:59:06.554Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.49.0 Chrome/83.0.4103.122 Electron/9.2.1 Safari/537.36" etag="L2a0dB0siU6K22OMntT2" version="13.1.3">
+    <diagram id="6hGFLwfOUW9BJ-s0fimq" name="Page-1">
+        <mxGraphModel dx="994" dy="605" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="40" width="520" height="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;font&gt;&lt;font size=&quot;1&quot; color=&quot;#ffffff&quot;&gt;&lt;b style=&quot;background-color: rgb(51 , 51 , 255) ; font-size: 160px&quot;&gt;INFO&lt;/b&gt;&lt;/font&gt;&lt;/font&gt;" style="text;html=1;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="320" width="520" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;font&gt;&lt;font color=&quot;#1a1a1a&quot; size=&quot;1&quot;&gt;&lt;b style=&quot;background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;sup style=&quot;font-size: 100px&quot;&gt;LICENCE&lt;/sup&gt;&lt;/b&gt;&lt;/font&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="140" width="520" height="120" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

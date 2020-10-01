@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source id.sh
+
+cp listing.json listing.json.bak
+cp discord.log discord.log.bak
+
+## start
+while true ; do
+    node index.js |& tee -a discord.log
+    sleep 10
+done

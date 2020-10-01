@@ -1,0 +1,12 @@
+AuthName "Access utilsateur CREMI"
+
+# Authentification
+        AuthType Kerberos
+        KrbServiceName HTTP
+        KrbMethodNegotiate off
+        KrbAuthoritative on
+        KrbMethodK5Passwd on
+        Krb5Keytab /etc/apache2/http.krb5.keytab
+        KrbAuthRealms U-BORDEAUX.FR CREMI.EMI.U-BORDEAUX1.FR
+        KrbVerifyKDC off
+	require valid-user
