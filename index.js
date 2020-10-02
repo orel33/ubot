@@ -289,7 +289,7 @@ function initServer(g) {
     // set roles
     const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: 66560, position: 1 }; // unverified 
     const studentRoleData = { name: 'student', color: 'GREEN', permissions: 37211712, position: 2 }; // student
-    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 & 0x00000200, position: 3 }; // teacher
+    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 | 0x00000200, position: 3 }; // teacher
 
     // special everyone role (some fields cannot be edited)
     var everyoneRole = g.roles.everyone;
