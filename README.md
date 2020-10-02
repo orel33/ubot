@@ -42,7 +42,7 @@ node index.js
 Or like that through a *screen* session like that:
 
 ```bash
-screen -S discord -d -m  
+screen -S discord -d -m node index.js
 ```
 
 To launch it on a remote server like *tesla* over SSH, I recommand a screen session like that:

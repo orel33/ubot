@@ -2,8 +2,8 @@
 
 source id.sh
 
-cp listing.json listing.json.bak
-cp discord.log discord.log.bak
+cp -f listing.json listing.json.bak
+cp -f discord.log discord.log.bak
 
 ## start
 while true ; do
