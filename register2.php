@@ -89,7 +89,7 @@ function adduser($filename, $discordid, $userid, $username, $mainrole, $extrarol
     clearstatcache(); // require before to use filesize()
     if (filesize($filename) > 0) {
         $contents = fread($fp, filesize($filename));
-        $array = json_decode($contents);
+        $array = json_decode($contents, true); // true => decode as array (not object)
     }
 
     // check user
