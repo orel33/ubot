@@ -66,7 +66,7 @@ function checkuser(&$array, $discordid, $userid) // pass $array by reference usi
 
     // to remove...
 
-    $array = array_values($array); // remove keys (because of unset)
+    // $array = array_values($array); // remove keys (because of unset)
 
     return $check;
 }
@@ -93,8 +93,8 @@ function adduser($filename, $discordid, $userid, $username, $mainrole, $extrarol
     }
 
     // check user
-    // $check = checkuser($array, $discordid, $userid);
-    $check = true;
+    $check = checkuser($array, $discordid, $userid);
+    // $check = true;
 
     // add it at the end of array
     if ($check) {
