@@ -14,7 +14,7 @@ const fs = require("fs");
 // Register your bot at https://discord.com/developers/applications/
 
 const botname = 'ubot'
-const filename = "listing.json";
+const filename = "listing2.json"; // TODO: replace this
 
 const token = process.env.DISCORD_TOKEN; // This bot yoken is required!
 if (!token) { console.log("Error: variable DISCORD_TOKEN not set in process env."); process.exit(1); }
@@ -97,8 +97,11 @@ function getStat(g) {
 /* ********************************************************************* */
 
 function printRegisteredUsers(g) {
-    var listing = JSON.parse(fs.readFileSync(filename, "utf8"));
-    listing.forEach(value => { console.log(value); });
+    const registeredUsers = JSON.parse(fs.readFileSync(filename, "utf8")); // object
+    for (var key in registeredUsers) {
+        var value = registeredUsers[key];
+        console.log(value);
+    }
 }
 
 /* ********************************************************************* */
@@ -196,7 +199,7 @@ function updateUsers(g) {
     console.log("=> Update users on server:", g.name);
 
     // load registered users
-    const registeredUsers = JSON.parse(fs.readFileSync(filename, "utf8"));
+    const registeredUsers = JSON.parse(fs.readFileSync(filename, "utf8")); // return an Object {key / value}
 
     // get role IDs
     const unverifiedRoleID = getRoleID(g, "unverified");
@@ -222,7 +225,8 @@ function updateUsers(g) {
         // if (hasUnverifiedRole) verified = false;
 
         // userinfo: array of length 4 [discordid, login, username, rolename] or undefined if not found...
-        const userinfo = registeredUsers.find(ruser => ruser[0] === member.id);
+        // const userinfo = registeredUsers.find(ruser => ruser[0] === member.id); // TODO: replace this
+        const userinfo = registeredUsers[member.id];
 
         // this user needs to register... (not found in listing.json)
         if (userinfo === undefined) {
@@ -242,8 +246,8 @@ function updateUsers(g) {
         }
         // this user is already registered (found in listing.json)
         else {
-            var username = userinfo[2];
-            var userrole = userinfo[3];
+            var username = userinfo["username"];
+            var userrole = userinfo["mainrole"];
 
             if (userrole !== "student" && userrole !== "teacher") {
                 console.log("Error: unknown registered role!");

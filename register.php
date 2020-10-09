@@ -8,7 +8,7 @@ error_reporting(-1);
 
 // functions
 
-function getrole($userid)
+function getmainrole($userid)
 {
     $groups = shell_exec('groups ' . $userid);
     //    echo "<pre> groups: " . $groups . "</pre>";
@@ -18,8 +18,19 @@ function getrole($userid)
     return "student"; // default role
 }
 
-// I try to map discord ID with UBx user ID
-function checkuser(&$array, $discordid, $userid, $username, $userrole) // pass $array by reference using &
+
+function getextrarole($userid)
+{
+    return ""; // default
+}
+
+
+// I try to map Discord ID with User ID... 
+// Rule: "only a single Discord account is allowed for each User account"
+// Mapping 1-1 discordid <-> userid
+// If <userid> is already registered in JSON with another <discordid>, overwrite it
+// If <discordid> is already registered in JSON with another <userid>, do nothing!
+function checkuser(&$array, $discordid, $userid) // pass $array by reference using &
 {
     if (!isset($array)) return false;
 
@@ -28,22 +39,22 @@ function checkuser(&$array, $discordid, $userid, $username, $userrole) // pass $
 
     // for all registered accounts rdiscordid <---> ruserid in listing.json
     foreach ($array as $idx => $userinfo) {
-        $rdiscordid = $userinfo[0];
-        $ruserid = $userinfo[1];
-        // 1) this discord id is already registered with the same user id... 
+        $rdiscordid = $userinfo['discordid'];
+        $ruserid = $userinfo['userid'];
+        // 1) this <discordid> is already registered with the same <userid>...
         if (($discordid === $rdiscordid) and ($userid === $ruserid)) {
             echo '<pre>⚠ Warning: this Discord account ' . $discordid . ' is already registered by yourself!</pre>';
             // array_splice($array, $idx, 1); // remove it, before to update it...
             unset($array[$idx]);
             // do nothing...
         }
-        // this discord id is already registered, but with another user id... 
+        // this <discordid> is already registered, but with another <userid>...
         else if (($discordid === $rdiscordid) and ($userid !== $ruserid)) {
             echo '<pre>⚠ Error: this Discord account ' . $discordid . ' is already registered by another user!</pre>';
             // do nothing...
             $check = false;
         }
-        // this user id is already registred with another discord id...
+        // this <userid> is already registred with another <discordid>...
         else if (($userid === $ruserid) and ($discordid !== $rdiscordid)) {
             echo '<pre>⚠ Warning: you are already registered with another Discord account! I will overwrite it...</pre>';
             // only a single Discord account is allowed
@@ -51,18 +62,17 @@ function checkuser(&$array, $discordid, $userid, $username, $userrole) // pass $
             unset($array[$idx]);
             // return true; 
         }
-
     }
 
     // to remove...
 
-    $array = array_values($array); // remove keys (because of unset)
+    // $array = array_values($array); // remove keys (because of unset)
 
     return $check;
 }
 
 
-function adduser($filename, $discordid, $userid, $username, $userrole)
+function adduser($filename, $discordid, $userid, $username, $mainrole, $extrarole)
 {
     $array = array();
     $fp = fopen($filename, 'c+');
@@ -79,16 +89,24 @@ function adduser($filename, $discordid, $userid, $username, $userrole)
     clearstatcache(); // require before to use filesize()
     if (filesize($filename) > 0) {
         $contents = fread($fp, filesize($filename));
-        $array = json_decode($contents);
+        $array = json_decode($contents, true); // true => decode as array (not object)
     }
 
     // check user
-    $check = checkuser($array, $discordid, $userid, $username, $userrole);
+    $check = checkuser($array, $discordid, $userid);
+    // $check = true;
 
     // add it at the end of array
     if ($check) {
-        $newuser = array($discordid, $userid, $username, $userrole);
-        array_push($array, $newuser); // $array[] = $newuser;
+        $newuser = array(
+            'discordid' => $discordid,
+            'userid' => $userid,
+            'username' => $username,
+            'mainrole' => $mainrole,
+            'extrarole' => $extrarole,
+        );
+        // array_push($array, $newuser); // $array[] = $newuser; // add at the end...
+        $array[$discordid] = $newuser; // replace it...
     }
 
     // save all users in file
@@ -113,16 +131,14 @@ if (empty($userid)) die("❌ Error: unknown User ID at CREMI!\n");
 $userinfo = posix_getpwnam($userid);
 $username = $userinfo['gecos'];
 if (empty($username)) die("❌ Error: unknown User Name at CREMI!\n");
-$userrole = getrole($userid);
+$mainrole = getmainrole($userid);
+$extrarole = getextrarole($userid);
 // TODO: how to find role using ldap or groups
 
 // add user in json file
-$filename = 'listing.json';
+$filename = 'listing2.json';
 
-// adduser($filename, '648990209681129483', 'auesnard', 'Aurelien Esnard', "teacher");
-// adduser($filename, '623112996956405761', 'pwacreni', 'Pierre-Andre Wacrenier', "teacher");
-// adduser($filename, '689504272517431308', 'aguermou', 'Abdou Guermouche', "teacher");
-$done = adduser($filename, $discordid, $userid, $username, $userrole);
+$done = adduser($filename, $discordid, $userid, $username, $mainrole, $extrarole);
 
 ?>
 
@@ -144,7 +160,8 @@ $done = adduser($filename, $discordid, $userid, $username, $userrole);
     <pre><?php echo "Discord ID: $discordid"; ?></pre>
     <pre><?php echo "User ID: $userid"; ?></pre>
     <pre><?php echo "User Name: $username"; ?></pre>
-    <pre><?php echo "User Role: $userrole"; ?></pre>
+    <pre><?php echo "Main Role: $mainrole"; ?></pre>
+    <pre><?php echo "Extra Role: $extrarole"; ?></pre>
 
     <?php
     if ($done)
