@@ -65,7 +65,7 @@ function getChannel(g, name) {
 
 function getStat(g) {
 
-    const unverifiedRoleID = getRoleID(g, "unverified");
+    // const unverifiedRoleID = getRoleID(g, "unverified");
     const studentRoleID = getRoleID(g, "student");
     const teacherRoleID = getRoleID(g, "teacher");
 
@@ -79,7 +79,7 @@ function getStat(g) {
 
         var hasStudentRole = member.roles.cache.has(studentRoleID);
         var hasTeacherRole = member.roles.cache.has(teacherRoleID);
-        var hasUnverifiedRole = member.roles.cache.has(unverifiedRoleID);
+        // var hasUnverifiedRole = member.roles.cache.has(unverifiedRoleID);
 
         nbAll++;
         if (hasStudentRole) nbStudents++;
@@ -284,7 +284,7 @@ function updateUsers(g) {
 function initServer(g) {
 
     // Student: https://discordapi.com/permissions.html#37211712
-    // Teacher: https://discordapi.com/permissions.html#1677196759 & 0x00000200 (STREAM)
+    // Teacher: https://discordapi.com/permissions.html#1677196759 | 0x00000200 (STREAM)
 
     // set roles
     const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: 66560, position: 1 }; // unverified 
@@ -318,7 +318,7 @@ function initServer(g) {
     //         .catch(console.error);
     // }
 
-    // console.log("=> Init server done for:", g.name);
+    console.log("=> Init server done for:", g.name);
 }
 
 
