@@ -25,8 +25,12 @@ function getextrarole($userid)
 }
 
 
-// I try to map discord ID with UBx user ID
-function checkuser(&$array, $discordid, $userid, $username, $userrole) // pass $array by reference using &
+// I try to map Discord ID with User ID... 
+// Rule: "only a single Discord account is allowed for each User account"
+// Mapping 1-1 discordid <-> userid
+// If <userid> is already registered in JSON with another <discordid>, overwrite it
+// If <discordid> is already registered in JSON with another <userid>, do nothing!
+function checkuser(&$array, $discordid, $userid) // pass $array by reference using &
 {
     if (!isset($array)) return false;
 
@@ -35,22 +39,22 @@ function checkuser(&$array, $discordid, $userid, $username, $userrole) // pass $
 
     // for all registered accounts rdiscordid <---> ruserid in listing.json
     foreach ($array as $idx => $userinfo) {
-        $rdiscordid = $userinfo[0];
-        $ruserid = $userinfo[1];
-        // 1) this discord id is already registered with the same user id... 
+        $rdiscordid = $userinfo['discordid'];
+        $ruserid = $userinfo['userid'];
+        // 1) this <discordid> is already registered with the same <userid>...
         if (($discordid === $rdiscordid) and ($userid === $ruserid)) {
             echo '<pre>⚠ Warning: this Discord account ' . $discordid . ' is already registered by yourself!</pre>';
             // array_splice($array, $idx, 1); // remove it, before to update it...
             unset($array[$idx]);
             // do nothing...
         }
-        // this discord id is already registered, but with another user id... 
+        // this <discordid> is already registered, but with another <userid>...
         else if (($discordid === $rdiscordid) and ($userid !== $ruserid)) {
             echo '<pre>⚠ Error: this Discord account ' . $discordid . ' is already registered by another user!</pre>';
             // do nothing...
             $check = false;
         }
-        // this user id is already registred with another discord id...
+        // this <userid> is already registred with another <discordid>...
         else if (($userid === $ruserid) and ($discordid !== $rdiscordid)) {
             echo '<pre>⚠ Warning: you are already registered with another Discord account! I will overwrite it...</pre>';
             // only a single Discord account is allowed
@@ -89,19 +93,20 @@ function adduser($filename, $discordid, $userid, $username, $mainrole, $extrarol
     }
 
     // check user
-    // $check = checkuser($array, $discordid, $userid, $username, $userrole);
+    // $check = checkuser($array, $discordid, $userid);
     $check = true;
 
     // add it at the end of array
     if ($check) {
         $newuser = array(
-            'discordid' => $discordid, 
+            'discordid' => $discordid,
             'userid' => $userid,
-            'username' => $username, 
+            'username' => $username,
             'mainrole' => $mainrole,
             'extrarole' => $extrarole,
         );
-        array_push($array, $newuser); // $array[] = $newuser;
+        // array_push($array, $newuser); // $array[] = $newuser; // add at the end...
+        $array[$discordid] = $newuser; // replace it...
     }
 
     // save all users in file
