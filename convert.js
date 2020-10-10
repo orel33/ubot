@@ -1,6 +1,6 @@
 // convert listing JSON format v1 to v2
 
-// JSON format v1 (array)
+// JSON format v1 (array of array)
 /*
 [
   [
@@ -18,7 +18,7 @@
 ]
 */
 
-// JSON format v2 (object)
+// JSON format v2.1 (object of object)
 /*
 {
   "689504272517431308": {
@@ -38,11 +38,32 @@
 }
 */
 
+// JSON format v2.2 (array of object)
+/*
+[
+  {
+      "discordid": "689504272517431308",
+      "userid": "aguermou",
+      "username": "Abdou Guermouche",
+      "mainrole": "teacher",
+      "extrarole": ""
+  },
+  {
+      "discordid": "504218107980546049",
+      "userid": "nbonicho",
+      "username": "Nicolas Bonichon",
+      "mainrole": "teacher",
+      "extrarole": ""
+  }
+}
+*/
+
+
 const fs = require("fs");
 console.log("convert listing.json => listing2.json");
 
+// version 2.1
 var dest = {};
-
 var source = JSON.parse(fs.readFileSync("listing.json", "utf8"));
 source.forEach(userinfo => {
   dest[userinfo[0]] = {
