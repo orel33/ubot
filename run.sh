@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source id.sh
+ID="~/id.sh"
+
+source $ID || exit 1
 
 cp -f listing.json listing.json.bak
 cp -f discord.log discord.log.bak
