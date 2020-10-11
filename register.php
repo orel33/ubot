@@ -21,9 +21,15 @@ function getmainrole($userid)
 
 function getextrarole($userid)
 {
-    return ""; // default
+    $fp = fopen("extra.json", 'c+');
+    if ($fp === false) return "";
+    $contents = fread($fp, filesize("extra.json"));
+    if ($contents === false) return "";
+    $array = json_decode($contents, true); // true => decode as array (not object)
+    fclose($fp);
+    return $array['hfranco'];
+    // return ""; // default
 }
-
 
 // I try to map Discord ID with User ID... 
 // Rule: "only a single Discord account is allowed for each User account"
