@@ -310,7 +310,7 @@ function initServer(g) {
     // set roles
     const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: 66560, position: 1 }; // unverified 
     const studentRoleData = { name: 'student', color: 'GREEN', permissions: 37211712, position: 2 }; // student
-    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 | 0x00000200, position: 3 }; // teacher
+    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 | 0x00000200, position: 5 }; // teacher
 
     // special everyone role (some fields cannot be edited)
     var everyoneRole = g.roles.everyone;
@@ -327,8 +327,8 @@ function initServer(g) {
 
 
     // create extra roles
-    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712, position: 10 }; // student
-    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712, position: 11 }; // student
+    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712, position: 3 }; // student
+    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712, position: 4 }; // student
     var l2infoRole = initRole(g, l2infoRoleData);
     var l3infoRole = initRole(g, l3infoRoleData);
 
