@@ -93,15 +93,26 @@ function getStat(g) {
 }
 
 /* ********************************************************************* */
+/*                              LISTING                                  */
+/* ********************************************************************* */
+
+function loadRegisteredUsers(filename) {
+    const array = JSON.parse(fs.readFileSync(filename, "utf8")); // array of objects
+    var map = {};
+    for (var item of array) {
+      var key = item["discordid"];
+      map[key] = item;
+    }
+    return map;
+}
+
+/* ********************************************************************* */
 /*                              PRINT                                    */
 /* ********************************************************************* */
 
-function printRegisteredUsers(g) {
-    const registeredUsers = JSON.parse(fs.readFileSync(filename, "utf8")); // object
-    for (var key in registeredUsers) {
-        var value = registeredUsers[key];
-        console.log(value);
-    }
+function printRegisteredUsers(g, filename) {
+    listing = loadRegisteredUsers(filename);
+    listing.forEach(value => { console.log(value); });
 }
 
 /* ********************************************************************* */
@@ -199,7 +210,7 @@ function updateUsers(g) {
     console.log("=> Update users on server:", g.name);
 
     // load registered users
-    const registeredUsers = JSON.parse(fs.readFileSync(filename, "utf8")); // return an Object {key / value}
+    const registeredUsers = loadRegisteredUsers(filename);
 
     // get role IDs
     const unverifiedRoleID = getRoleID(g, "unverified");
@@ -220,13 +231,7 @@ function updateUsers(g) {
         if (member.id == g.ownerID) return;
         if (member.roles.highest.position > g.me.roles.highest.position) return;
 
-        // var verified = false;
-        // if (hasStudentRole || hasTeacherRole) verified = true;
-        // if (hasUnverifiedRole) verified = false;
-
-        // userinfo: array of length 4 [discordid, login, username, rolename] or undefined if not found...
-        // const userinfo = registeredUsers.find(ruser => ruser[0] === member.id); // TODO: replace this
-        const userinfo = registeredUsers[member.id];
+        const userinfo = registeredUsers[member.id]; // or undefined if not found
 
         // this user needs to register... (not found in listing.json)
         if (userinfo === undefined) {
@@ -240,6 +245,7 @@ function updateUsers(g) {
                 // username += "⚠";
                 // if (member.displayName != username) await member.setNickname(username).catch(console.error);
                 sendPublicRegisterMessage(member);
+                var username = userinfo["username"];
                 console.log(`=> The incoming user \"${username}\" (${member.id}) move to \"unverified\" role!`);
             }
             return; // continue with next member

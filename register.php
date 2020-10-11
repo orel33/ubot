@@ -64,9 +64,7 @@ function checkuser(&$array, $discordid, $userid) // pass $array by reference usi
         }
     }
 
-    // to remove...
-
-    // $array = array_values($array); // remove keys (because of unset)
+    $array = array_values($array); // remove all keys (because of unset) => implicit keys
 
     return $check;
 }
@@ -105,8 +103,8 @@ function adduser($filename, $discordid, $userid, $username, $mainrole, $extrarol
             'mainrole' => $mainrole,
             'extrarole' => $extrarole,
         );
-        // array_push($array, $newuser); // $array[] = $newuser; // add at the end...
-        $array[$discordid] = $newuser; // replace it...
+        array_push($array, $newuser); // $array[] = $newuser; // add at the end...
+        // $array[$discordid] = $newuser; // replace it...
     }
 
     // save all users in file

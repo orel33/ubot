@@ -63,18 +63,33 @@ const fs = require("fs");
 console.log("convert listing.json => listing2.json");
 
 // version 2.1
-var dest = {};
+// var dest = {};
+// var source = JSON.parse(fs.readFileSync("listing.json", "utf8"));
+// source.forEach(userinfo => {
+//   dest[userinfo[0]] = {
+//     'discordid': userinfo[0],
+//     'userid': userinfo[1],
+//     'username': userinfo[2],
+//     'mainrole': userinfo[3],
+//     'extrarole': ""
+//   };
+// });
+
+// version 2.2
+var dest = [];
 var source = JSON.parse(fs.readFileSync("listing.json", "utf8"));
 source.forEach(userinfo => {
-  dest[userinfo[0]] = {
+  var obj = {
     'discordid': userinfo[0],
     'userid': userinfo[1],
     'username': userinfo[2],
     'mainrole': userinfo[3],
     'extrarole': ""
   };
+  dest.push(obj); 
 });
 
-fs.writeFileSync("listing2.json", JSON.stringify(dest, null, 4), "utf8");
+
+fs.writeFileSync("listing22.json", JSON.stringify(dest, null, 4), "utf8");
 
 // EOF
