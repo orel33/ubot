@@ -100,8 +100,8 @@ function loadRegisteredUsers(filename) {
     const array = JSON.parse(fs.readFileSync(filename, "utf8")); // array of objects
     var map = {};
     for (var item of array) {
-      var key = item["discordid"];
-      map[key] = item;
+        var key = item["discordid"];
+        map[key] = item;
     }
     return map;
 }
@@ -265,8 +265,8 @@ function updateUsers(g) {
                 if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
                 if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
                 if (member.displayName != username) await member.setNickname(username).catch(console.error);
-                if (extrarole === "l2info") username += "2️⃣";
-                if (extrarole === "l3info") username += "3️⃣";
+                if (extrarole === "l2info") username += "🥈";   // ⚁ 2️⃣
+                if (extrarole === "l3info") username += "🥉";   // ⚂ 3️⃣
                 if (member.displayName != username) await member.setNickname(username).catch(console.error);
                 if (!hasStudentRole) {
                     await member.roles.add(studentRoleID).catch(console.error);
