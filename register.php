@@ -24,10 +24,7 @@ function getextrarole($userid)
     $fp = fopen("extra.json", 'r');
     if ($fp === false) return "";
     $contents = fread($fp, filesize("extra.json"));
-    // var_dump($contents);
     if ($contents === false) return "";
-    // $contents = '{"hfranco":"l3info", "other":"l2info"}';
-    // var_dump($contents);
     $array = json_decode($contents, true); // true => decode as array (not object)
     if ($array === null) echo '<pre>⚠ Warning: fail to decode extra.json! </pre>';
     fclose($fp);

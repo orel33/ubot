@@ -253,25 +253,29 @@ function updateUsers(g) {
         // this user is already registered (found in listing.json)
         else {
             var username = userinfo["username"];
-            var userrole = userinfo["mainrole"];
+            var mainrole = userinfo["mainrole"];
+            var extrarole = userinfo["extrarole"];
 
-            if (userrole !== "student" && userrole !== "teacher") {
+            if (mainrole !== "student" && mainrole !== "teacher") {
                 console.log("Error: unknown registered role!");
                 return;
             }
 
-            if (userrole === "student") {
+            if (mainrole === "student") {
                 if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
                 if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
+                if (member.displayName != username) await member.setNickname(username).catch(console.error);
+                if (extrarole === "l2info") username += "2️⃣";
+                if (extrarole === "l3info") username += "3️⃣";
                 if (member.displayName != username) await member.setNickname(username).catch(console.error);
                 if (!hasStudentRole) {
                     await member.roles.add(studentRoleID).catch(console.error);
                     sendPublicRegisteredMessage(member);
-                    console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${userrole}!`);
+                    console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
                 }
             }
 
-            if (userrole === "teacher") {
+            if (mainrole === "teacher") {
                 if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
                 if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
                 username += "🎓";
@@ -279,7 +283,7 @@ function updateUsers(g) {
                 if (!hasTeacherRole) {
                     await member.roles.add(teacherRoleID).catch(console.error);
                     sendPublicRegisteredMessage(member);
-                    console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${userrole}!`);
+                    console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
                 }
             }
 

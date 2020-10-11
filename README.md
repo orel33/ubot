@@ -75,7 +75,8 @@ The account verification is just based on a HTTPS / HTACCESS account registratio
 
 ## TODO
 
-* add extra-roles in listing.json (@l2info, @l3info, @admin, ...)
+* add extra-roles in listing.json (@l2info, @l3info, @admin, ...) based on extra.json
+* use emoji 2️⃣ and￼3️⃣ in nickname...
 * add command `!kickunverified`
 
 ## Documentation
