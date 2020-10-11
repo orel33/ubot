@@ -90,6 +90,6 @@ source.forEach(userinfo => {
 });
 
 
-fs.writeFileSync("listing22.json", JSON.stringify(dest, null, 4), "utf8");
+fs.writeFileSync("listing2.json", JSON.stringify(dest, null, 4), "utf8");
 
 // EOF

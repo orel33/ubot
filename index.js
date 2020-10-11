@@ -14,7 +14,7 @@ const fs = require("fs");
 // Register your bot at https://discord.com/developers/applications/
 
 const botname = 'ubot'
-const filename = "listing2.json";
+const filename = "listing.json";
 
 const token = process.env.DISCORD_TOKEN; // This bot yoken is required!
 if (!token) { console.log("Error: variable DISCORD_TOKEN not set in process env."); process.exit(1); }

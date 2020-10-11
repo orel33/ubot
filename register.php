@@ -134,7 +134,7 @@ $extrarole = getextrarole($userid);
 // TODO: how to find role using ldap or groups
 
 // add user in json file
-$filename = 'listing2.json';
+$filename = 'listing.json';
 
 $done = adduser($filename, $discordid, $userid, $username, $mainrole, $extrarole);
 
