@@ -327,8 +327,8 @@ function initServer(g) {
 
 
     // create extra roles
-    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712, position: 2 }; // student
-    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712, position: 2 }; // student
+    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712, position: 10 }; // student
+    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712, position: 11 }; // student
     var l2infoRole = initRole(g, l2infoRoleData);
     var l3infoRole = initRole(g, l3infoRoleData);
 
