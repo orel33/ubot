@@ -285,22 +285,41 @@ async function updateUserExtra(g, member, userinfo) {
     // get extra roles
     const l2infoRoleID = getRoleID(g, "l2info");
     const l3infoRoleID = getRoleID(g, "l3info");
-    const hasL2InfoRole = member.roles.cache.has(l2infoRoleID);
-    const hasL3InfoRole = member.roles.cache.has(l3infoRoleID);
+    const l2miRoleID = getRoleID(g, "l2mi");
+    const l3miRoleID = getRoleID(g, "l3mi");
+    const l2isiRoleID = getRoleID(g, "l2isi");
+    const l3isiRoleID = getRoleID(g, "l3isi");
+    const l2optimRoleID = getRoleID(g, "l2optim");
+    const l3optimRoleID = getRoleID(g, "l3optim");
+
+    const hasl2infoRole = member.roles.cache.has(l2infoRoleID);
+    const hasl3infoRole = member.roles.cache.has(l3infoRoleID);
+    const hasl2miRole = member.roles.cache.has(l2miRoleID);
+    const hasl3miRole = member.roles.cache.has(l3miRoleID);
+    const hasl2isiRole = member.roles.cache.has(l2isiRoleID);
+    const hasl3isiRole = member.roles.cache.has(l3isiRoleID);
+    const hasl2optimRole = member.roles.cache.has(l2optimRoleID);
+    const hasl3optimRole = member.roles.cache.has(l3optimRoleID);
 
     var username = userinfo["username"];
     var mainrole = userinfo["mainrole"];
     var extrarole = userinfo["extrarole"];
 
     if (mainrole === "student") {
-        if (extrarole === "l2info") username += "🥈";
-        if (extrarole === "l3info") username += "🥉";
-        if (member.displayName != username) await member.setNickname(username).catch(console.error);
+        // TODO: todo
+        // if (extrarole === "l2info") username += "🥈";
+        // if (extrarole === "l3info") username += "🥉";
+        // if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
         // handle extra role...
-        // if (extrarole === "") await member.roles.remove(unverifiedRoleID).catch(console.error);
-        if (extrarole === "l2info" && !hasL2InfoRole) await member.roles.add(l2infoRoleID).catch(console.error);
-        if (extrarole === "l3info" && !hasL3InfoRole) await member.roles.add(l3infoRoleID).catch(console.error);
+        if (extrarole === "l2info" && !hasl2infoRole) await member.roles.add(l2infoRoleID).catch(console.error);
+        if (extrarole === "l3info" && !hasl3infoRole) await member.roles.add(l3infoRoleID).catch(console.error);
+        if (extrarole === "l2mi" && !hasl2miRole) await member.roles.add(l2miRoleID).catch(console.error);
+        if (extrarole === "l3mi" && !hasl3miRole) await member.roles.add(l3miRoleID).catch(console.error);
+        if (extrarole === "l2isi" && !hasl2isiRole) await member.roles.add(l2isiRoleID).catch(console.error);
+        if (extrarole === "l3isi" && !hasl3isiRole) await member.roles.add(l3isiRoleID).catch(console.error);
+        if (extrarole === "l2optim" && !hasl2optimRole) await member.roles.add(l2optimRoleID).catch(console.error);
+        if (extrarole === "l3optim" && !hasl3optimRole) await member.roles.add(l3optimRoleID).catch(console.error);
     }
 
 }
