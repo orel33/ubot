@@ -205,6 +205,100 @@ function resetUsers(g) {
 
 /* ********************************************************************* */
 
+function updateUser(g, member, userinfo) {
+
+    // get role IDs
+    const unverifiedRoleID = getRoleID(g, "unverified");
+    const studentRoleID = getRoleID(g, "student");
+    const teacherRoleID = getRoleID(g, "teacher");
+
+    // test roles
+    const hasStudentRole = member.roles.cache.has(studentRoleID);
+    const hasTeacherRole = member.roles.cache.has(teacherRoleID);
+    const hasUnverifiedRole = member.roles.cache.has(unverifiedRoleID);
+
+    // this user needs to register... (not found in listing.json)
+    if (userinfo === undefined) {
+        // console.log(`=> The user \"${member.displayName}\" needs to register...`);
+        // reset teacher and student roles (if not yet registered)
+        if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
+        if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
+        // add unverified role (if not yet already set) and send register message
+        if (!hasUnverifiedRole) {
+            await member.roles.add(unverifiedRoleID).catch(console.error);
+            sendPublicRegisterMessage(member);
+            console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
+        }
+        return; // continue with next member
+    }
+    // this user is already registered (found in listing.json)
+    else {
+        var username = userinfo["username"];
+        var mainrole = userinfo["mainrole"];
+        var extrarole = userinfo["extrarole"];
+
+        if (mainrole !== "student" && mainrole !== "teacher") {
+            console.log("Error: unknown registered role!");
+            return;
+        }
+
+        if (mainrole === "student") {
+            if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
+            if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
+            if (member.displayName != username) await member.setNickname(username).catch(console.error);
+            if (!hasStudentRole) {
+                await member.roles.add(studentRoleID).catch(console.error);
+                sendPublicRegisteredMessage(member);
+                console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
+            }
+        }
+
+        if (mainrole === "teacher") {
+            if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
+            if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
+            username += "🎓";
+            if (member.displayName != username) await member.setNickname(username).catch(console.error);
+            if (!hasTeacherRole) {
+                await member.roles.add(teacherRoleID).catch(console.error);
+                sendPublicRegisteredMessage(member);
+                console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
+            }
+        }
+
+        return; // continue with next member
+    }
+}
+
+/* ********************************************************************* */
+
+function updateUserExtra(g, member, userinfo) {
+
+    if (userinfo === undefined) return;
+
+    // get extra roles
+    const l2infoRoleID = getRoleID(g, "l2info");
+    const l3infoRoleID = getRoleID(g, "l3info");
+    const hasL2InfoRole = member.roles.cache.has(l2infoRoleID);
+    const hasL3InfoRole = member.roles.cache.has(l3infoRoleID);
+
+    var username = userinfo["username"];
+    var mainrole = userinfo["mainrole"];
+    var extrarole = userinfo["extrarole"];
+
+    if (mainrole === "student") {
+        if (extrarole === "l2info") username += "🥈";
+        if (extrarole === "l3info") username += "🥉";
+        if (member.displayName != username) await member.setNickname(username).catch(console.error);
+
+        // handle extra role...
+        // if (extrarole === "") await member.roles.remove(unverifiedRoleID).catch(console.error);
+        if (extrarole === "l2info" && !hasL2InfoRole) await member.roles.add(l2infoRoleID).catch(console.error);
+        if (extrarole === "l3info" && !hasL3InfoRole) await member.roles.add(l3infoRoleID).catch(console.error);
+    }
+
+}
+
+/* ********************************************************************* */
 
 function updateUsers(g) {
     console.log("=> Update users on server:", g.name);
@@ -212,23 +306,9 @@ function updateUsers(g) {
     // load registered users
     const registeredUsers = loadRegisteredUsers(filename);
 
-    // get role IDs
-    const unverifiedRoleID = getRoleID(g, "unverified");
-    const studentRoleID = getRoleID(g, "student");
-    const teacherRoleID = getRoleID(g, "teacher");
-    const l2infoRoleID = getRoleID(g, "l2info");
-    const l3infoRoleID = getRoleID(g, "l3info");
-
     g.members.fetch();
     g.members.cache.forEach(async member => {
-
         await member.fetch();
-
-        const hasStudentRole = member.roles.cache.has(studentRoleID);
-        const hasTeacherRole = member.roles.cache.has(teacherRoleID);
-        const hasUnverifiedRole = member.roles.cache.has(unverifiedRoleID);
-        const hasL2InfoRole = member.roles.cache.has(l2infoRoleID);
-        const hasL3InfoRole = member.roles.cache.has(l3infoRoleID);
 
         // check special roles (continue with next member)
         if (member.id == g.me.id) return;
@@ -236,67 +316,21 @@ function updateUsers(g) {
         if (member.roles.highest.position > g.me.roles.highest.position) return;
 
         const userinfo = registeredUsers[member.id]; // or undefined if not found
-
-        // this user needs to register... (not found in listing.json)
-        if (userinfo === undefined) {
-            // console.log(`=> The user \"${member.displayName}\" needs to register...`);
-            // reset teacher and student roles (if not yet registered)
-            if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
-            if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
-            // add unverified role (if not yet already set) and send register message
-            if (!hasUnverifiedRole) {
-                await member.roles.add(unverifiedRoleID).catch(console.error);
-                // username += "⚠";
-                // if (member.displayName != username) await member.setNickname(username).catch(console.error);
-                sendPublicRegisterMessage(member);
-                var username = userinfo["username"];
-                console.log(`=> The incoming user \"${username}\" (${member.id}) move to \"unverified\" role!`);
-            }
-            return; // continue with next member
-        }
-        // this user is already registered (found in listing.json)
-        else {
-            var username = userinfo["username"];
-            var mainrole = userinfo["mainrole"];
-            var extrarole = userinfo["extrarole"];
-
-            if (mainrole !== "student" && mainrole !== "teacher") {
-                console.log("Error: unknown registered role!");
-                return;
-            }
-
-            if (mainrole === "student") {
-                if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
-                if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
-                if (extrarole === "l2info") username += "🥈";   // ⚁ 2️⃣
-                if (extrarole === "l3info") username += "🥉";   // ⚂ 3️⃣
-                if (member.displayName != username) await member.setNickname(username).catch(console.error);
-                if (!hasStudentRole) {
-                    await member.roles.add(studentRoleID).catch(console.error);
-                    sendPublicRegisteredMessage(member);
-                    console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
-                }
-                // handle extra role...
-                // if (extrarole === "") await member.roles.remove(unverifiedRoleID).catch(console.error);
-                if (extrarole === "l2info" && !hasL2InfoRole) await member.roles.add(l2infoRoleID).catch(console.error);
-                if (extrarole === "l3info" && !hasL3InfoRole) await member.roles.add(l3infoRoleID).catch(console.error);
-            }
-
-            if (mainrole === "teacher") {
-                if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
-                if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
-                username += "🎓";
-                if (member.displayName != username) await member.setNickname(username).catch(console.error);
-                if (!hasTeacherRole) {
-                    await member.roles.add(teacherRoleID).catch(console.error);
-                    sendPublicRegisteredMessage(member);
-                    console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
-                }
-            }
-
-            return; // continue with next member
-        }
+        updateUser(g, member, userinfo);
+        // updateUserExtra(g, member, userinfo);
     });
+
+}
+
+/* ********************************************************************* */
+
+function initServerExtra(g) {
+
+    // create extra roles
+    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712 /*, position: 3*/ }; // student
+    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712 /*, position: 4*/ }; // student
+    var l2infoRole = initRole(g, l2infoRoleData);
+    var l3infoRole = initRole(g, l3infoRoleData);
 
 }
 
@@ -308,9 +342,9 @@ function initServer(g) {
     // Teacher: https://discordapi.com/permissions.html#1677196759 | 0x00000200 (STREAM)
 
     // set roles
-    const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: 66560, position: 1 }; // unverified 
-    const studentRoleData = { name: 'student', color: 'GREEN', permissions: 37211712, position: 2 }; // student
-    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 | 0x00000200, position: 5 }; // teacher
+    const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: 66560 /* , position: 1*/ }; // unverified 
+    const studentRoleData = { name: 'student', color: 'GREEN', permissions: 37211712 /*, position: 2*/ }; // student
+    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 | 0x00000200 /*, position: 5*/ }; // teacher
 
     // special everyone role (some fields cannot be edited)
     var everyoneRole = g.roles.everyone;
@@ -324,14 +358,6 @@ function initServer(g) {
     // special bot role (some fields cannot be edited)
     var botRole = g.roles.cache.find(role => role.name === botname);
     // botRole.setPosition(5).catch(console.error); // TODO: don't work... do it by hand!
-
-
-    // create extra roles
-    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712, position: 3 }; // student
-    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712, position: 4 }; // student
-    var l2infoRole = initRole(g, l2infoRoleData);
-    var l3infoRole = initRole(g, l3infoRoleData);
-
 
     // update bot nickname
     // g.me.setNickname("ubot").catch(console.error); // 🚣
