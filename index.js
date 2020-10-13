@@ -343,7 +343,7 @@ function updateUsers(g) {
 
         const userinfo = registeredUsers[member.id]; // or undefined if not found
         updateUser(g, member, userinfo);
-        // updateUserExtra(g, member, userinfo);
+        updateUserExtra(g, member, userinfo);
     });
 
 }
