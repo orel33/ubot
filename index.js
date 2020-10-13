@@ -205,7 +205,7 @@ function resetUsers(g) {
 
 /* ********************************************************************* */
 
-function updateUser(g, member, userinfo) {
+async function updateUser(g, member, userinfo) {
 
     // get role IDs
     const unverifiedRoleID = getRoleID(g, "unverified");
@@ -271,7 +271,7 @@ function updateUser(g, member, userinfo) {
 
 /* ********************************************************************* */
 
-function updateUserExtra(g, member, userinfo) {
+async function updateUserExtra(g, member, userinfo) {
 
     if (userinfo === undefined) return;
 
