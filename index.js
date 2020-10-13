@@ -16,6 +16,13 @@ const fs = require("fs");
 const botname = 'ubot'
 const filename = "listing.json";
 
+// Student: https://discordapi.com/permissions.html#37211712
+// Teacher: https://discordapi.com/permissions.html#1677196759 | 0x00000200 (STREAM)
+
+const unverifiedPerm = 66560;
+const studentPerm = 37211712;
+const teacherPerm = 1677196759 | 0x00000200;
+
 const token = process.env.DISCORD_TOKEN; // This bot yoken is required!
 if (!token) { console.log("Error: variable DISCORD_TOKEN not set in process env."); process.exit(1); }
 
@@ -327,10 +334,23 @@ function updateUsers(g) {
 function initServerExtra(g) {
 
     // create extra roles
-    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: 37211712 /*, position: 3*/ }; // student
-    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: 37211712 /*, position: 4*/ }; // student
+    const l2infoRoleData = { name: 'l2info', color: 'GREEN', permissions: studentPerm }; // student
+    const l3infoRoleData = { name: 'l3info', color: 'GREEN', permissions: studentPerm }; // student
+    const l2miRoleData = { name: 'l2mi', color: 'GREEN', permissions: studentPerm }; // student
+    const l3miRoleData = { name: 'l3mi', color: 'GREEN', permissions: studentPerm }; // student
+    const l2optimRoleData = { name: 'l2optim', color: 'GREEN', permissions: studentPerm }; // student
+    const l3optimRoleData = { name: 'l3optim', color: 'GREEN', permissions: studentPerm }; // student
+    const l2isiRoleData = { name: 'l2isi', color: 'GREEN', permissions: studentPerm }; // student
+    const l3isiRoleData = { name: 'l3isi', color: 'GREEN', permissions: studentPerm }; // student
+
     var l2infoRole = initRole(g, l2infoRoleData);
     var l3infoRole = initRole(g, l3infoRoleData);
+    var l2miRole = initRole(g, l2miRoleData);
+    var l3miRole = initRole(g, l3miRoleData);
+    var l2optimRole = initRole(g, l2optimRoleData);
+    var l3optimRole = initRole(g, l3optimRoleData);
+    var l2isiRole = initRole(g, l2isiRoleData);
+    var l3isiRole = initRole(g, l3isiRoleData);
 
 }
 
@@ -338,13 +358,10 @@ function initServerExtra(g) {
 
 function initServer(g) {
 
-    // Student: https://discordapi.com/permissions.html#37211712
-    // Teacher: https://discordapi.com/permissions.html#1677196759 | 0x00000200 (STREAM)
-
     // set roles
-    const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: 66560 /* , position: 1*/ }; // unverified 
-    const studentRoleData = { name: 'student', color: 'GREEN', permissions: 37211712 /*, position: 2*/ }; // student
-    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: 1677196759 | 0x00000200 /*, position: 5*/ }; // teacher
+    const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: unverifiedPerm }; // unverified 
+    const studentRoleData = { name: 'student', color: 'GREEN', permissions: studentPerm }; // student
+    const teacherRoleData = { name: 'teacher', color: 'ORANGE', permissions: teacherPerm }; // teacher
 
     // special everyone role (some fields cannot be edited)
     var everyoneRole = g.roles.everyone;
@@ -394,6 +411,7 @@ function reset() {
 function startBot(g) {
     console.log("=> Start bot on server:", g.name);
     initServer(g);
+    initServerExtra(g);
     sendPublicMessage(g, "welcome", "Ubot est dans la place !");
     updateUsers(g);
     printStat(g);
