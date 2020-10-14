@@ -143,16 +143,24 @@ function getExtraStat(g) {
         if (hasl3infoRole) nbl3info++;
         if (hasl2miRole) nbl2mi++;
         if (hasl3miRole) nbl3mi++;
-        if (hasl2optimRole) nbl2optim++;
-        if (hasl3optimRole) nbl3optim++;
         if (hasl2isiRole) nbl2isi++;
         if (hasl3isiRole) nbl3isi++;
+        if (hasl2optimRole) nbl2optim++;
+        if (hasl3optimRole) nbl3optim++;
 
     });
 
     var nbExtra = nbl2info + nbl3info + nbl2mi + nbl3mi + nbl2optim + nbl3optim + nbl2isi + nbl3isi;
-    // var nbUnknown = nbStudents - nbExtra;
-    var msg =`* L2 Info: ${nbl2info}\n* L3 Info: ${nbl3info}\n* L2 Math-Info: ${nbl2mi}\n* L3 Math-Info: ${nbl3mi}\n`;
+    var nbUnknown = nbStudents - nbExtra;
+    var msg =`* L2 Info: ${nbl2info}\n`;
+    msg += `* L3 Info: ${nbl3info}\n`;
+    msg += `* L2 Math-Info: ${nbl2mi}\n`;
+    msg += `* L3 Math-Info: ${nbl3mi}\n`;
+    msg += `* L2 Isi: ${nbl2isi}\n`;
+    msg += `* L3 Isi: ${nbl3isi}\n`;
+    msg += `* L2 Optim: ${nbl2optim}\n`;
+    msg += `* L3 Optim: ${nbl3optim}\n`;
+    msg += `* Unknown: ${nbUnknown} / ${nbStudents}\n`;
     return msg;
 }
 
