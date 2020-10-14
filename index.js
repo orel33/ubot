@@ -335,7 +335,7 @@ function kickUnverifiedUsers(g) {
         if (member.id != g.ownerID) return; // skip owner
         const hasUnverifiedRole = hasRole(g, member, "unverified");
         if(hasUnverifiedRole) { 
-            await member.kick().catch(console.error);
+            member.kick().catch(console.error);
             sendPrivateMessage(member, `Sorry, I kick your unverified account from server \"${g.name}\"!`);
         }
     });
