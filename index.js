@@ -364,6 +364,7 @@ async function updateUser(g, member, userinfo) {
         // }
 
         var done = setMainRole(g, member, "unverified");
+        console.log(`=> Set main role unverified at \"${username}\" (${member.id}) : ${done}`);
         if (done) {
             // sendPublicRegisterMessage(member);
             console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
@@ -394,6 +395,7 @@ async function updateUser(g, member, userinfo) {
 
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = setMainRole(g, member, "student");
+            console.log(`=> Set main role student at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
                 // sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
@@ -413,6 +415,7 @@ async function updateUser(g, member, userinfo) {
             username += "🎓";
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = setMainRole(g, member, "teacher");
+            console.log(`=> Set main role teacher at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
                 // sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
