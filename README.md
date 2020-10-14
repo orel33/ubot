@@ -3,15 +3,19 @@
 This is the public repository for a Discord bot (named `ubot`) used for account
 verification against University of Bordeaux IDNum.
 
-## Create your own bot
+## Create your Discord server with your own bot
 
-* First, create a Discord App: https://discord.com/developers/applications/
-* Then, add a bot user, with name: *ubot* and get your bot `<TOKEN>` and `CLIENTID`.
+* First, create a Discord Server, named `<MYSERVER>` as for instance "Licence Info"
+* Then, create a Discord App: https://discord.com/developers/applications/
+* Add a bot user, with name: *ubot* and get your bot `<TOKEN>` and `CLIENTID`.
 * Also, note your Dicord account ID : `<MYID>`.
 * Then, set all permissions for your bot with: https://discordapi.com/permissions.html
 * And click to the link provided in order to add it to your server... Accept it!
 * This link is just like this : https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot
 * Or like that with permissions : https://discord.com/oauth2/authorize?client_id=CLIENTID&scope=bot&permissions=2147483639 (all permissions, except admin = 2147483639)
+* In the Discord settings of your server, check the role position of your bot,
+  that must be higher than other role...
+* Run the bot server with `./run.sh` (or `./startbot.sh` for a persistent *screen* session)
 
 ## Program your first bot
 
@@ -83,5 +87,3 @@ The account verification is just based on a HTTPS / HTACCESS account registratio
 
 * https://discord.js.org/#/docs/main/stable/class/Client (Client API)
 * https://www.grafikart.fr/tutoriels/bot-discordjs-892
-
-

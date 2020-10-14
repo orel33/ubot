@@ -32,6 +32,7 @@ if (!myid) { console.log("Error: variable DISCORD_MYID not set in process env.")
 const unverifiedPerm = 66560;
 const studentPerm = 37211712;
 const teacherPerm = 1677196759 | 0x00000200;
+const everyonePerm = 66560;
 
 // main roles
 const unverifiedRoleData = { name: 'unverified', color: 'YELLOW', permissions: unverifiedPerm }; // unverified 
@@ -480,19 +481,23 @@ function initServer(g) {
 
     // special everyone role (some fields cannot be edited)
     var everyoneRole = g.roles.everyone;
-    everyoneRole.setPermissions(66560).catch(console.error);;
+    everyoneRole.setPermissions(everyonePerm).catch(console.error);;
+
+    // special bot role (some fields cannot be edited)
+    var botRole = g.roles.cache.find(role => role.name === botname);
+    if(botRole.position < g.roles.highest.position) { 
+        console.error("Error: the bot position must be the highest role in server settings!");
+        process.exit(1);
+    }
+
+    // g.me.setNickname("ubot").catch(console.error); // 🚣
 
     // main roles
     var unverifiedRole = initRole(g, unverifiedRoleData);
     var studentRole = initRole(g, studentRoleData);
     var teacherRole = initRole(g, teacherRoleData);
+    // FIXME: how to set position of main roles? maybe 10/20/30/...
 
-    // special bot role (some fields cannot be edited)
-    var botRole = g.roles.cache.find(role => role.name === botname);
-    // botRole.setPosition(5).catch(console.error); // TODO: don't work... do it by hand!
-
-    // update bot nickname
-    // g.me.setNickname("ubot").catch(console.error); // 🚣
 
     // TODO: create channel #welcome (if needed)
     // const welcomeChannel = getChannel(g,"welcome");
@@ -505,6 +510,8 @@ function initServer(g) {
     //         .catch(console.error);
     // }
 
+
+    
     console.log("=> Init server done for:", g.name);
 }
 
