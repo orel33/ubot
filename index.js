@@ -489,10 +489,11 @@ function initServer(g) {
     var botRole = g.roles.cache.find(role => role.name === botname);
     botRole.setColor('DARK_VIVID_PINK').catch(console.error);
 
-    if(botRole.position < g.roles.highest.position) { 
-        console.error("Error: the bot position must be the highest role in server settings!");
-        process.exit(1);
-    }
+    // FIXME: how to check position of ubot > main & extra roles
+    // if(botRole.position < g.roles.highest.position) { 
+    //     console.error("Error: the bot position must be the highest role in server settings!");
+    //     process.exit(1);
+    // }
 
     // g.me.setNickname("ubot").catch(console.error); // 🚣
 
