@@ -363,7 +363,7 @@ async function updateUser(g, member, userinfo) {
         //     console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
         // }
 
-        var done = setMainRole(g, member, "unverified");
+        var done = await setMainRole(g, member, "unverified");
         console.log(`=> Set main role unverified at \"${username}\" (${member.id}) : ${done}`);
         if (done) {
             // sendPublicRegisterMessage(member);
@@ -394,7 +394,7 @@ async function updateUser(g, member, userinfo) {
             // }
 
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
-            var done = setMainRole(g, member, "student");
+            var done = await setMainRole(g, member, "student");
             console.log(`=> Set main role student at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
                 // sendPublicRegisteredMessage(member);
@@ -414,7 +414,7 @@ async function updateUser(g, member, userinfo) {
             // }
             username += "🎓";
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
-            var done = setMainRole(g, member, "teacher");
+            var done = await setMainRole(g, member, "teacher");
             console.log(`=> Set main role teacher at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
                 // sendPublicRegisteredMessage(member);
@@ -443,14 +443,14 @@ async function updateUserExtra(g, member, userinfo) {
         // if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
         // handle extra role...
-        if (extrarole === "l2info") addRole(g, member, extrarole);
-        if (extrarole === "l3info") addRole(g, member, extrarole);
-        if (extrarole === "l2mi") addRole(g, member, extrarole);
-        if (extrarole === "l3mi") addRole(g, member, extrarole);
-        if (extrarole === "l2isi") addRole(g, member, extrarole);
-        if (extrarole === "l3isi") addRole(g, member, extrarole);
-        if (extrarole === "l2optim") addRole(g, member, extrarole);
-        if (extrarole === "l3optim") addRole(g, member, extrarole);
+        if (extrarole === "l2info") await addRole(g, member, extrarole);
+        if (extrarole === "l3info") await addRole(g, member, extrarole);
+        if (extrarole === "l2mi") await addRole(g, member, extrarole);
+        if (extrarole === "l3mi") await addRole(g, member, extrarole);
+        if (extrarole === "l2isi") await addRole(g, member, extrarole);
+        if (extrarole === "l3isi") await addRole(g, member, extrarole);
+        if (extrarole === "l2optim") await addRole(g, member, extrarole);
+        if (extrarole === "l3optim") await addRole(g, member, extrarole);
     }
 
 }
