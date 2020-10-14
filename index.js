@@ -487,7 +487,7 @@ function initServer(g) {
 
     // special bot role (some fields cannot be edited)
     var botRole = g.roles.cache.find(role => role.name === botname);
-    botRole.setColor('DARK_VIVID_PINK').catch(console.error);
+    // botRole.setColor('DARK_VIVID_PINK').catch(console.error);
 
     // FIXME: how to check position of ubot > main & extra roles
     // if(botRole.position < g.roles.highest.position) { 
