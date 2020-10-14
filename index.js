@@ -152,8 +152,8 @@ function getStat(g) {
     g.members.cache.forEach(member => {
         member.fetch();
         nbAll++;
-        if (hasRole("student")) nbStudents++;
-        if (hasRole("teacher")) nbTeachers++;
+        if (hasRole(g, member, "student")) nbStudents++;
+        if (hasRole(g, member, "teacher")) nbTeachers++;
     });
 
     var nbRegistered = nbStudents + nbTeachers;
@@ -179,17 +179,17 @@ function getExtraStat(g) {
     g.members.cache.forEach(member => {
         member.fetch();
 
-        if (hasRole("student")) nbStudents++;
+        if (hasRole(g, member, "student")) nbStudents++;
         else return;
 
-        if (hasRole("l2info")) nbl2info++;
-        if (hasRole("l3info")) nbl3info++;
-        if (hasRole("l2mi")) nbl2mi++;
-        if (hasRole("l3mi")) nbl3mi++;
-        if (hasRole("l2isi")) nbl2isi++;
-        if (hasRole("l3isi")) nbl3isi++;
-        if (hasRole("l2optim")) nbl2optim++;
-        if (hasRole("l3optim")) nbl3optim++;
+        if (hasRole(g, member, "l2info")) nbl2info++;
+        if (hasRole(g, member, "l3info")) nbl3info++;
+        if (hasRole(g, member, "l2mi")) nbl2mi++;
+        if (hasRole(g, member, "l3mi")) nbl3mi++;
+        if (hasRole(g, member, "l2isi")) nbl2isi++;
+        if (hasRole(g, member, "l3isi")) nbl3isi++;
+        if (hasRole(g, member, "l2optim")) nbl2optim++;
+        if (hasRole(g, member, "l3optim")) nbl3optim++;
 
     });
 
@@ -345,9 +345,9 @@ async function updateUser(g, member, userinfo) {
     const teacherRoleID = getRoleID(g, "teacher");
 
     // test roles
-    const hasStudentRole = hasRole("student");
-    const hasTeacherRole = hasRole("teacher");
-    const hasUnverifiedRole = hasRole("unverified");
+    const hasStudentRole = hasRole(g, member, "student");
+    const hasTeacherRole = hasRole(g, member, "teacher");
+    const hasUnverifiedRole = hasRole(g, member, "unverified");
 
     // this user needs to register... (not found in listing.json)
     if (userinfo === undefined) {
