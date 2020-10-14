@@ -338,7 +338,7 @@ function kickUnverifiedUsers(g) {
             member.kick().catch(console.error);
             var msg = `Sorry, I kick your unverified account from server \"${g.name}\"!`;
             console.log("=> " + msg);
-            sendPrivateMessage(member, msg);
+            // sendPrivateMessage(member, msg); // FIXME: not allowed because of anti-spam system!
         }
     });
 
