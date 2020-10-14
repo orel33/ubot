@@ -151,7 +151,7 @@ function getExtraStat(g) {
     });
 
     var nbExtra = nbl2info + nbl3info + nbl2mi + nbl3mi + nbl2optim + nbl3optim + nbl2isi + nbl3isi;
-    var nbUnknown = nbStudent - nbExtra;
+    // var nbUnknown = nbStudents - nbExtra;
     var msg =`* L2 Info: ${nbl2info}\n* L3 Info: ${nbl3info}\n* L2 Math-Info: ${nbl2mi}\n* L3 Math-Info: ${nbl3mi}\n`;
     return msg;
 }
