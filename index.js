@@ -335,10 +335,11 @@ function kickUnverifiedUsers(g) {
         if (member.id == g.ownerID) return; // skip owner
         const hasUnverifiedRole = hasRole(g, member, "unverified");
         if(hasUnverifiedRole) { 
-            member.kick().catch(console.error);
-            var msg = `Sorry, I kick your unverified account from server \"${g.name}\"!`;
-            console.log("=> " + msg);
+            var msg = `Sorry <@${member.id}>, I kick your unverified account from server \"${g.name}\"!`;
             // sendPrivateMessage(member, msg); // FIXME: not allowed because of anti-spam system!
+            sendPublicMessage(g, "welcome", msg); // in channel #welcome
+            console.log("=> " + msg);
+            member.kick().catch(console.error);
         }
     });
 
