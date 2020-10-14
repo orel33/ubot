@@ -479,6 +479,8 @@ function initServerExtra(g) {
 
 function initServer(g) {
 
+    console.log("=> Init server done for:", g.name);
+
     // special everyone role (some fields cannot be edited)
     var everyoneRole = g.roles.everyone;
     everyoneRole.setPermissions(everyonePerm).catch(console.error);;
@@ -512,7 +514,6 @@ function initServer(g) {
 
 
     
-    console.log("=> Init server done for:", g.name);
 }
 
 
