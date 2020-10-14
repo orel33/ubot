@@ -100,6 +100,64 @@ function getStat(g) {
 }
 
 /* ********************************************************************* */
+
+function getExtraStat(g) {
+
+    const studentRoleID = getRoleID(g, "student");
+    const l2infoRoleID = getRoleID(g, "l2info");
+    const l3infoRoleID = getRoleID(g, "l3info");
+    const l2miRoleID = getRoleID(g, "l2mi");
+    const l3miRoleID = getRoleID(g, "l3mi");
+    const l2isiRoleID = getRoleID(g, "l2isi");
+    const l3isiRoleID = getRoleID(g, "l3isi");
+    const l2optimRoleID = getRoleID(g, "l2optim");
+    const l3optimRoleID = getRoleID(g, "l3optim");
+
+    var nbStudents = 0;
+    var nbl2info = 0;
+    var nbl3info = 0;
+    var nbl2mi = 0;
+    var nbl3mi = 0;
+    var nbl2optim = 0;
+    var nbl3optim = 0;
+    var nbl2isi = 0;
+    var nbl3isi = 0;
+
+    g.members.cache.forEach(member => {
+        member.fetch();
+
+        const hasStudentRole = member.roles.cache.has(studentRoleID);
+        if (hasStudentRole) nbStudents++;
+        else return;
+
+        const hasl2infoRole = member.roles.cache.has(l2infoRoleID);
+        const hasl3infoRole = member.roles.cache.has(l3infoRoleID);
+        const hasl2miRole = member.roles.cache.has(l2miRoleID);
+        const hasl3miRole = member.roles.cache.has(l3miRoleID);
+        const hasl2isiRole = member.roles.cache.has(l2isiRoleID);
+        const hasl3isiRole = member.roles.cache.has(l3isiRoleID);
+        const hasl2optimRole = member.roles.cache.has(l2optimRoleID);
+        const hasl3optimRole = member.roles.cache.has(l3optimRoleID);
+
+        if (hasl2infoRole) nbl2info++;
+        if (hasl3infoRole) nbl3info++;
+        if (hasl2miRole) nbl2mi++;
+        if (hasl3miRole) nbl3mi++;
+        if (hasl2optimRole) nbl2optim++;
+        if (hasl3optimRole) nbl3optim++;
+        if (hasl2isiRole) nbl2isi++;
+        if (hasl3isiRole) nbl3isi++;
+
+    });
+
+    var nbExtra = nbl2info + nbl3info + nbl2mi + nbl3mi + nbl2optim + nbl3optim + nbl2isi + nbl3isi;
+    var nbUnknown = nbStudent - nbExtra;
+    var msg =`* L2 Info: ${nbl2info}\n* L3 Info: ${nbl3info}\n* L2 Math-Info: ${nbl2mi}\n* L3 Math-Info: ${nbl3mi}\n`;
+    return msg;
+}
+
+
+/* ********************************************************************* */
 /*                              LISTING                                  */
 /* ********************************************************************* */
 
@@ -242,7 +300,7 @@ async function updateUser(g, member, userinfo) {
     else {
         var username = userinfo["username"];
         var mainrole = userinfo["mainrole"];
-        var extrarole = userinfo["extrarole"];
+        // var extrarole = userinfo["extrarole"];
 
         if (mainrole !== "student" && mainrole !== "teacher") {
             console.log("Error: unknown registered role!");
@@ -464,7 +522,8 @@ client.on('message', message => {
 
     if (message.content === '!stat') {
         var stat = getStat(message.guild);
-        message.reply(stat);
+        var extrastat = getExtraStat(message.guild);
+        message.reply(stat + `\n` + extrastat);
     }
 
     if (message.content === '!update') {
