@@ -487,6 +487,8 @@ function initServer(g) {
 
     // special bot role (some fields cannot be edited)
     var botRole = g.roles.cache.find(role => role.name === botname);
+    botRole.setColor('BLUE').catch(console.error);
+
     if(botRole.position < g.roles.highest.position) { 
         console.error("Error: the bot position must be the highest role in server settings!");
         process.exit(1);
