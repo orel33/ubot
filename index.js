@@ -332,7 +332,7 @@ function kickUnverifiedUsers(g) {
     g.members.cache.forEach(member => {
         member.fetch();
         if (member.id == g.me.id) return; // skip bot
-        if (member.id != g.ownerID) return; // skip owner
+        if (member.id == g.ownerID) return; // skip owner
         const hasUnverifiedRole = hasRole(g, member, "unverified");
         if(hasUnverifiedRole) { 
             member.kick().catch(console.error);
