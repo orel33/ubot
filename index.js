@@ -269,16 +269,21 @@ function sendPublicMessage(g, channelname, msg) {
 
 /* ********************************************************************* */
 
+function sendPrivateMessage(member, msg) {
+    if (!member) return; // FIXME: why this ???
+    member.createDM().then(channel => { channel.send(msg); }).catch(console.error);
+}
+
+
+/* ********************************************************************* */
+
 function sendPrivateRegisterMessage(member) { // flooding problem!
     if (!member) return; // FIXME: why this ???
-    // console.log("=> Send a private register message to :", member.user.username); FIXME: why user is NULL?
-    member.createDM().then(channel => {
-        var msg = `Welcome to this official UBx server: ${member.guild.name}!\n`;
-        var url = `https://lstinfo.emi.u-bordeaux.fr/discord/register.php?discordid=${member.id}`;
-        msg += `You need first to register your Discord account on this page: ${url}\n`;
-        msg += "This page requires authentication with your login and password from the University of Bordeaux."
-        channel.send(msg);
-    }).catch(console.error);
+    var msg = `Welcome to this official UBx server: ${member.guild.name}!\n`;
+    var url = `https://lstinfo.emi.u-bordeaux.fr/discord/register.php?discordid=${member.id}`;
+    msg += `You need first to register your Discord account on this page: ${url}\n`;
+    msg += "This page requires authentication with your login and password from the University of Bordeaux."
+    sendPrivateMessage(member, msg);
 }
 
 /* ********************************************************************* */
@@ -328,9 +333,11 @@ function kickUnverifiedUsers(g) {
         member.fetch();
         if (member.id == g.me.id) return; // skip bot
         if (member.id != g.ownerID) return; // skip owner
-        // TODO: todo
-        // member.roles.set([unverifiedRoleID]).catch(console.error); // TODO: add() or set() ?
-        // if (member.id != g.ownerID) member.setNickname(member.user.username).catch(console.error);
+        const hasUnverifiedRole = hasRole(g, member, "unverified");
+        if(hasUnverifiedRole) { 
+            await member.kick().catch(console.error);
+            sendPrivateMessage(member, `Sorry, I kick your unverified account from server \"${g.name}\"!`);
+        }
     });
 
 }
@@ -564,7 +571,7 @@ client.on('message', message => {
     if (message.content === '!kickunverified') {
         if (message.author.id == message.guild.ownerID || message.author.id == myid) {
             kickUnverifiedUsers(message.guild);
-            message.reply('Kick unverified users!');
+            message.reply('Bang bang... Kick unverified users!');
         }
     }
 
