@@ -351,22 +351,10 @@ async function updateUser(g, member, userinfo) {
 
     // this user needs to register... (not found in listing.json)
     if (userinfo === undefined) {
-
-        // // console.log(`=> The user \"${member.displayName}\" needs to register...`);
-        // // reset teacher and student roles (if not yet registered)
-        // if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
-        // if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
-        // // add unverified role (if not yet already set) and send register message
-        // if (!hasUnverifiedRole) {
-        //     await member.roles.add(unverifiedRoleID).catch(console.error);
-        //     sendPublicRegisterMessage(member);
-        //     console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
-        // }
-
         var done = await setMainRole(g, member, "unverified");
-        console.log(`=> Set main role unverified at \"${username}\" (${member.id}) : ${done}`);
+        // console.log(`=> Set main role unverified at \"${username}\" (${member.id}) : ${done}`);
         if (done) {
-            // sendPublicRegisterMessage(member);
+            sendPublicRegisterMessage(member);
             console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
         }
 
@@ -376,7 +364,6 @@ async function updateUser(g, member, userinfo) {
     else {
         var username = userinfo["username"];
         var mainrole = userinfo["mainrole"];
-        // var extrarole = userinfo["extrarole"];
 
         if (mainrole !== "student" && mainrole !== "teacher") {
             console.log("Error: unknown registered role!");
@@ -384,40 +371,22 @@ async function updateUser(g, member, userinfo) {
         }
 
         if (mainrole === "student") {
-            // if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
-            // if (hasTeacherRole) await member.roles.remove(teacherRoleID).catch(console.error);
-            // if (member.displayName != username) await member.setNickname(username).catch(console.error);
-            // if (!hasStudentRole) {
-            //     await member.roles.add(studentRoleID).catch(console.error);
-            //     sendPublicRegisteredMessage(member);
-            //     console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
-            // }
-
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = await setMainRole(g, member, "student");
-            console.log(`=> Set main role student at \"${username}\" (${member.id}) : ${done}`);
+            // console.log(`=> Set main role student at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
-                // sendPublicRegisteredMessage(member);
+                sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
             }
         }
 
         if (mainrole === "teacher") {
-            // if (hasUnverifiedRole) await member.roles.remove(unverifiedRoleID).catch(console.error);
-            // if (hasStudentRole) await member.roles.remove(studentRoleID).catch(console.error);
-            // username += "🎓";
-            // if (member.displayName != username) await member.setNickname(username).catch(console.error);
-            // if (!hasTeacherRole) {
-            //     await member.roles.add(teacherRoleID).catch(console.error);
-            //     sendPublicRegisteredMessage(member);
-            //     console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
-            // }
             username += "🎓";
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = await setMainRole(g, member, "teacher");
-            console.log(`=> Set main role teacher at \"${username}\" (${member.id}) : ${done}`);
+            // console.log(`=> Set main role teacher at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
-                // sendPublicRegisteredMessage(member);
+                sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
             }
         }
