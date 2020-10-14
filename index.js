@@ -340,9 +340,9 @@ function kickUnverifiedUsers(g) {
 async function updateUser(g, member, userinfo) {
 
     // get role IDs
-    const unverifiedRoleID = getRoleID(g, "unverified");
-    const studentRoleID = getRoleID(g, "student");
-    const teacherRoleID = getRoleID(g, "teacher");
+    // const unverifiedRoleID = getRoleID(g, "unverified");
+    // const studentRoleID = getRoleID(g, "student");
+    // const teacherRoleID = getRoleID(g, "teacher");
 
     // test roles
     const hasStudentRole = hasRole(g, member, "student");
@@ -365,7 +365,7 @@ async function updateUser(g, member, userinfo) {
 
         var done = setMainRole(g, member, "unverified");
         if (done) {
-            sendPublicRegisterMessage(member);
+            // sendPublicRegisterMessage(member);
             console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
         }
 
@@ -395,7 +395,7 @@ async function updateUser(g, member, userinfo) {
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = setMainRole(g, member, "student");
             if (done) {
-                sendPublicRegisteredMessage(member);
+                // sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
             }
         }
@@ -414,7 +414,7 @@ async function updateUser(g, member, userinfo) {
             if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = setMainRole(g, member, "teacher");
             if (done) {
-                sendPublicRegisteredMessage(member);
+                // sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
             }
         }
