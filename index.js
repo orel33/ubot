@@ -327,7 +327,7 @@ function resetUsers(g) {
 /* ********************************************************************* */
 
 function kickUnverifiedUsers(g) {
-    console.log("=> Kick unverified users on server:", g.name);
+    console.log("=> Kick all unverified users on server:", g.name);
     g.members.fetch();
     g.members.cache.forEach(member => {
         member.fetch();
@@ -336,7 +336,9 @@ function kickUnverifiedUsers(g) {
         const hasUnverifiedRole = hasRole(g, member, "unverified");
         if(hasUnverifiedRole) { 
             member.kick().catch(console.error);
-            sendPrivateMessage(member, `Sorry, I kick your unverified account from server \"${g.name}\"!`);
+            var msg = `Sorry, I kick your unverified account from server \"${g.name}\"!`;
+            console.log("=> " + msg);
+            sendPrivateMessage(member, msg);
         }
     });
 
