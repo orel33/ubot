@@ -22,6 +22,8 @@ if (!token) { console.log("Error: variable DISCORD_TOKEN not set in process env.
 const myid = process.env.DISCORD_MYID;   // This user ID is required!
 if (!myid) { console.log("Error: variable DISCORD_MYID not set in process env."); process.exit(1); }
 
+var extra = false; // enable extra roles for server "Licence Info"
+
 /* ********************************************************************* */
 /*                            ROLES DATA                                 */
 /* ********************************************************************* */
@@ -168,6 +170,7 @@ function getStat(g) {
 /* ********************************************************************* */
 
 function getExtraStat(g) {
+    if (!extra) return "";
 
     var nbStudents = 0;
     var nbl2info = 0;
@@ -400,6 +403,7 @@ async function updateUserMainRole(g, member, userinfo) {
 /* ********************************************************************* */
 
 async function updateUserExtraRole(g, member, userinfo) {
+    if (!extra) return;
 
     if (userinfo === undefined) return;
     var username = userinfo["username"];
@@ -431,11 +435,14 @@ async function updateUserNickname(g, member, userinfo) {
     if (userinfo === undefined) return;
     var username = userinfo["username"];
 
-    if(hasRole(g, member, "teacher")) username += "🎓";
-    // if(hasRole(g, member, "l2info")) username += "🥈";
-    // if(hasRole(g, member, "l3info")) username += "🥉";
-    if(hasRole(g, member, "délégué")) username += "🦄";
-    
+    if (hasRole(g, member, "teacher")) username += "🎓";
+    if (extra) {
+        if (hasRole(g, member, "l2info") || hasRole(g, member, "l2mi") ||
+            hasRole(g, member, "l2isi") || hasRole(g, member, "l2optim")) username += "🥈";
+        if (hasRole(g, member, "l3info") || hasRole(g, member, "l3mi") ||
+            hasRole(g, member, "l3isi") || hasRole(g, member, "l3optim")) username += "🥉";
+        if (hasRole(g, member, "délégué")) username += "🦄";
+    }
     if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
 }
@@ -459,7 +466,7 @@ function updateUsers(g) {
 
         const userinfo = registeredUsers[member.id]; // or undefined if not found
         updateUserMainRole(g, member, userinfo);
-        updateUserExtraRole(g, member, userinfo);
+        if (extra) updateUserExtraRole(g, member, userinfo);
         updateUserNickname(g, member, userinfo);
     });
 
@@ -468,6 +475,7 @@ function updateUsers(g) {
 /* ********************************************************************* */
 
 function initServerExtra(g) {
+    if (!extra) return;
 
     // create extra roles
     var l2infoRole = initRole(g, l2infoRoleData);
@@ -541,8 +549,9 @@ function reset() {
 
 function startBot(g) {
     console.log("=> Start bot on server:", g.name);
+    if (g.name === "Licence Info") extra = true;
     initServer(g);
-    initServerExtra(g);
+    if (extra) initServerExtra(g);
     sendPublicMessage(g, "welcome", "Ubot est dans la place !");
     updateUsers(g);
     printStat(g);
@@ -576,8 +585,12 @@ client.on('message', message => {
 
     if (message.content === '!stat') {
         var stat = getStat(message.guild);
-        var extrastat = getExtraStat(message.guild);
-        message.reply(stat + `\n` + extrastat);
+        var msg = stat;
+        if (extra) {
+            var extrastat = getExtraStat(message.guild);
+            msg = stat + `\n` + extrastat
+        }
+        message.reply(msg);
     }
 
     if (message.content === '!update') {
