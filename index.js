@@ -48,6 +48,7 @@ const l2optimRoleData = { name: 'l2optim', color: 'GREEN', permissions: studentP
 const l3optimRoleData = { name: 'l3optim', color: 'GREEN', permissions: studentPerm }; // student
 const l2isiRoleData = { name: 'l2isi', color: 'GREEN', permissions: studentPerm }; // student
 const l3isiRoleData = { name: 'l3isi', color: 'GREEN', permissions: studentPerm }; // student
+const delegateRoleData = { name: 'délégué', color: 'LUMINOUS_VIVID_PINK', permissions: studentPerm }; // student
 
 /* ********************************************************************* */
 /*                          BASIC ROUTINES                               */
@@ -335,7 +336,7 @@ function kickUnverifiedUsers(g) {
         if (member.id == g.me.id) return; // skip bot
         if (member.id == g.ownerID) return; // skip owner
         const hasUnverifiedRole = hasRole(g, member, "unverified");
-        if(hasUnverifiedRole) { 
+        if (hasUnverifiedRole) {
             var msg = `Sorry <@${member.id}>, I kick your unverified account from server \"${g.name}\"!`;
             // sendPrivateMessage(member, msg); // FIXME: not allowed because of anti-spam system!
             sendPublicMessage(g, "welcome", msg); // in channel #welcome
@@ -349,11 +350,6 @@ function kickUnverifiedUsers(g) {
 /* ********************************************************************* */
 
 async function updateUser(g, member, userinfo) {
-
-    // get role IDs
-    // const unverifiedRoleID = getRoleID(g, "unverified");
-    // const studentRoleID = getRoleID(g, "student");
-    // const teacherRoleID = getRoleID(g, "teacher");
 
     // test roles
     const hasStudentRole = hasRole(g, member, "student");
@@ -411,27 +407,33 @@ async function updateUser(g, member, userinfo) {
 async function updateUserExtra(g, member, userinfo) {
 
     if (userinfo === undefined) return;
-
     var username = userinfo["username"];
     var mainrole = userinfo["mainrole"];
-    var extrarole = userinfo["extrarole"];
+    if (mainrole !== "student") return;
 
-    if (mainrole === "student") {
-        // TODO: todo
-        // if (extrarole === "l2info") username += "🥈";
-        // if (extrarole === "l3info") username += "🥉";
-        // if (member.displayName != username) await member.setNickname(username).catch(console.error);
+    var role = userinfo["extrarole"];
+
+    var extraroles = role.split(",");
+
+    // TODO: todo
+    // if (extrarole === "l2info") username += "🥈";
+    // if (extrarole === "l3info") username += "🥉";
+    // if (member.displayName != username) await member.setNickname(username).catch(console.error);
+
+    extraroles.forEach(role => {
 
         // handle extra role...
-        if (extrarole === "l2info") await addRole(g, member, extrarole);
-        if (extrarole === "l3info") await addRole(g, member, extrarole);
-        if (extrarole === "l2mi") await addRole(g, member, extrarole);
-        if (extrarole === "l3mi") await addRole(g, member, extrarole);
-        if (extrarole === "l2isi") await addRole(g, member, extrarole);
-        if (extrarole === "l3isi") await addRole(g, member, extrarole);
-        if (extrarole === "l2optim") await addRole(g, member, extrarole);
-        if (extrarole === "l3optim") await addRole(g, member, extrarole);
-    }
+        if (role === "l2info") await addRole(g, member, role); // "🥈"
+        if (role === "l3info") await addRole(g, member, role); // "🥉"
+        if (role === "l2mi") await addRole(g, member, role);
+        if (role === "l3mi") await addRole(g, member, role);
+        if (role === "l2isi") await addRole(g, member, role);
+        if (role === "l3isi") await addRole(g, member, role);
+        if (role === "l2optim") await addRole(g, member, role);
+        if (role === "l3optim") await addRole(g, member, role);
+        if (role === "délégué") await addRole(g, member, role); // "🦄"
+    });
+
 
 }
 
@@ -472,6 +474,7 @@ function initServerExtra(g) {
     var l3optimRole = initRole(g, l3optimRoleData);
     var l2isiRole = initRole(g, l2isiRoleData);
     var l3isiRole = initRole(g, l3isiRoleData);
+    var delegateRole = initRole(g, delegateRoleData);
 
 }
 
@@ -487,7 +490,7 @@ function initServer(g) {
 
     // special bot role (some fields cannot be edited)
     var botRole = g.roles.cache.find(role => role.name === botname);
-    // botRole.setColor('DARK_VIVID_PINK').catch(console.error);
+    // botRole.setColor('DARK_VIVID_PINK').catch(console.error); // FIXME: not possible... try ubot as admin?
 
     // FIXME: how to check position of ubot > main & extra roles
     // if(botRole.position < g.roles.highest.position) { 
@@ -515,8 +518,6 @@ function initServer(g) {
     //         .catch(console.error);
     // }
 
-
-    
 }
 
 
