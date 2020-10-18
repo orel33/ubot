@@ -48,7 +48,8 @@ const l2optimRoleData = { name: 'l2optim', color: 'GREEN', permissions: studentP
 const l3optimRoleData = { name: 'l3optim', color: 'GREEN', permissions: studentPerm }; // student
 const l2isiRoleData = { name: 'l2isi', color: 'GREEN', permissions: studentPerm }; // student
 const l3isiRoleData = { name: 'l3isi', color: 'GREEN', permissions: studentPerm }; // student
-const delegateRoleData = { name: 'délégué', color: 'LUMINOUS_VIVID_PINK', permissions: studentPerm }; // student
+// const delegateRoleData = { name: 'délégué', color: 'LUMINOUS_VIVID_PINK', permissions: studentPerm }; // student
+const delegateRoleData = { name: 'délégué', color: 'GREEN', permissions: studentPerm }; // student
 
 /* ********************************************************************* */
 /*                          BASIC ROUTINES                               */
@@ -349,7 +350,7 @@ function kickUnverifiedUsers(g) {
 
 /* ********************************************************************* */
 
-async function updateUser(g, member, userinfo) {
+async function updateUserMainRole(g, member, userinfo) {
 
     // test roles
     const hasStudentRole = hasRole(g, member, "student");
@@ -359,7 +360,6 @@ async function updateUser(g, member, userinfo) {
     // this user needs to register... (not found in listing.json)
     if (userinfo === undefined) {
         var done = await setMainRole(g, member, "unverified");
-        // console.log(`=> Set main role unverified at \"${username}\" (${member.id}) : ${done}`);
         if (done) {
             sendPublicRegisterMessage(member);
             console.log(`=> The incoming user \"${member.displayName}\" (${member.id}) move to \"unverified\" role!`);
@@ -378,9 +378,7 @@ async function updateUser(g, member, userinfo) {
         }
 
         if (mainrole === "student") {
-            if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = await setMainRole(g, member, "student");
-            // console.log(`=> Set main role student at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
                 sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
@@ -388,10 +386,7 @@ async function updateUser(g, member, userinfo) {
         }
 
         if (mainrole === "teacher") {
-            username += "🎓";
-            if (member.displayName != username) await member.setNickname(username).catch(console.error);
             var done = await setMainRole(g, member, "teacher");
-            // console.log(`=> Set main role teacher at \"${username}\" (${member.id}) : ${done}`);
             if (done) {
                 sendPublicRegisteredMessage(member);
                 console.log(`=> The user \"${username}\" (${member.id}) is now registered and verified as ${mainrole}!`);
@@ -404,7 +399,7 @@ async function updateUser(g, member, userinfo) {
 
 /* ********************************************************************* */
 
-async function updateUserExtra(g, member, userinfo) {
+async function updateUserExtraRole(g, member, userinfo) {
 
     if (userinfo === undefined) return;
     var username = userinfo["username"];
@@ -412,28 +407,36 @@ async function updateUserExtra(g, member, userinfo) {
     if (mainrole !== "student") return;
 
     var role = userinfo["extrarole"];
-
     var extraroles = role.split(",");
-
-    // TODO: todo
-    // if (extrarole === "l2info") username += "🥈";
-    // if (extrarole === "l3info") username += "🥉";
-    // if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
     extraroles.forEach(async role => {
 
         // handle extra role...
-        if (role === "l2info") await addRole(g, member, role); // "🥈"
-        if (role === "l3info") await addRole(g, member, role); // "🥉"
+        if (role === "l2info") await addRole(g, member, role);
+        if (role === "l3info") await addRole(g, member, role);
         if (role === "l2mi") await addRole(g, member, role);
         if (role === "l3mi") await addRole(g, member, role);
         if (role === "l2isi") await addRole(g, member, role);
         if (role === "l3isi") await addRole(g, member, role);
         if (role === "l2optim") await addRole(g, member, role);
         if (role === "l3optim") await addRole(g, member, role);
-        if (role === "délégué") await addRole(g, member, role); // "🦄"
+        if (role === "délégué") await addRole(g, member, role);
     });
+}
 
+/* ********************************************************************* */
+
+async function updateUserNickname(g, member, userinfo) {
+
+    if (userinfo === undefined) return;
+    var username = userinfo["username"];
+
+    if(hasRole("teacher")) username += "🎓";
+    // if(hasRole("l2info")) username += "🥈";
+    // if(hasRole("l3info")) username += "🥉";
+    if(hasRole("délégué")) username += "🦄";
+    
+    if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
 }
 
@@ -455,8 +458,9 @@ function updateUsers(g) {
         if (member.roles.highest.position > g.me.roles.highest.position) return;
 
         const userinfo = registeredUsers[member.id]; // or undefined if not found
-        updateUser(g, member, userinfo);
-        updateUserExtra(g, member, userinfo);
+        updateUserMainRole(g, member, userinfo);
+        updateUserExtraRole(g, member, userinfo);
+        updateUserNickname(g, member, userinfo);
     });
 
 }
