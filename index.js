@@ -22,8 +22,6 @@ if (!token) { console.log("Error: variable DISCORD_TOKEN not set in process env.
 const myid = process.env.DISCORD_MYID;   // This user ID is required!
 if (!myid) { console.log("Error: variable DISCORD_MYID not set in process env."); process.exit(1); }
 
-var extra = false; // enable extra roles for server "Licence Info"
-
 /* ********************************************************************* */
 /*                            ROLES DATA                                 */
 /* ********************************************************************* */
@@ -170,7 +168,6 @@ function getStat(g) {
 /* ********************************************************************* */
 
 function getExtraStat(g) {
-    if (!extra) return "";
 
     var nbStudents = 0;
     var nbl2info = 0;
@@ -403,7 +400,6 @@ async function updateUserMainRole(g, member, userinfo) {
 /* ********************************************************************* */
 
 async function updateUserExtraRole(g, member, userinfo) {
-    if (!extra) return;
 
     if (userinfo === undefined) return;
     var username = userinfo["username"];
@@ -436,7 +432,7 @@ async function updateUserNickname(g, member, userinfo) {
     var username = userinfo["username"];
 
     if (hasRole(g, member, "teacher")) username += "🎓";
-    if (extra) {
+    if (g.name === "Licence Info") {
         if (hasRole(g, member, "l2info") || hasRole(g, member, "l2mi") ||
             hasRole(g, member, "l2isi") || hasRole(g, member, "l2optim")) username += "🥈";
         if (hasRole(g, member, "l3info") || hasRole(g, member, "l3mi") ||
@@ -466,7 +462,7 @@ function updateUsers(g) {
 
         const userinfo = registeredUsers[member.id]; // or undefined if not found
         updateUserMainRole(g, member, userinfo);
-        if (extra) updateUserExtraRole(g, member, userinfo);
+        if (g.name === "Licence Info") updateUserExtraRole(g, member, userinfo);
         updateUserNickname(g, member, userinfo);
     });
 
@@ -475,7 +471,6 @@ function updateUsers(g) {
 /* ********************************************************************* */
 
 function initServerExtra(g) {
-    if (!extra) return;
 
     // create extra roles
     var l2infoRole = initRole(g, l2infoRoleData);
@@ -549,12 +544,8 @@ function reset() {
 
 function startBot(g) {
     console.log("=> Start bot on server:", g.name);
-    if (g.name === "Licence Info") { 
-        console.log("=> Enable extra roles for server:", g.name);
-        extra = true;
-    }
     initServer(g);
-    if (extra) initServerExtra(g);
+    if (g.name === "Licence Info") initServerExtra(g);
     sendPublicMessage(g, "welcome", "Ubot est dans la place !");
     updateUsers(g);
     printStat(g);
@@ -589,7 +580,7 @@ client.on('message', message => {
     if (message.content === '!stat') {
         var stat = getStat(message.guild);
         var msg = stat;
-        if (extra) {
+        if (message.guild.name === "Licence Info") {
             var extrastat = getExtraStat(message.guild);
             msg = stat + `\n` + extrastat
         }
