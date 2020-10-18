@@ -420,7 +420,7 @@ async function updateUserExtra(g, member, userinfo) {
     // if (extrarole === "l3info") username += "🥉";
     // if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
-    extraroles.forEach(role => {
+    extraroles.forEach(async role => {
 
         // handle extra role...
         if (role === "l2info") await addRole(g, member, role); // "🥈"
