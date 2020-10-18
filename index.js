@@ -549,7 +549,10 @@ function reset() {
 
 function startBot(g) {
     console.log("=> Start bot on server:", g.name);
-    if (g.name === "Licence Info") extra = true;
+    if (g.name === "Licence Info") { 
+        console.log("=> Enable extra roles for server:", g.name);
+        extra = true;
+    }
     initServer(g);
     if (extra) initServerExtra(g);
     sendPublicMessage(g, "welcome", "Ubot est dans la place !");
