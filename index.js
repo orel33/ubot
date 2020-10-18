@@ -431,10 +431,10 @@ async function updateUserNickname(g, member, userinfo) {
     if (userinfo === undefined) return;
     var username = userinfo["username"];
 
-    if(hasRole("teacher")) username += "🎓";
-    // if(hasRole("l2info")) username += "🥈";
-    // if(hasRole("l3info")) username += "🥉";
-    if(hasRole("délégué")) username += "🦄";
+    if(hasRole(g, member, "teacher")) username += "🎓";
+    // if(hasRole(g, member, "l2info")) username += "🥈";
+    // if(hasRole(g, member, "l3info")) username += "🥉";
+    if(hasRole(g, member, "délégué")) username += "🦄";
     
     if (member.displayName != username) await member.setNickname(username).catch(console.error);
 
