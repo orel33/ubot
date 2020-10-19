@@ -48,8 +48,8 @@ const l2optimRoleData = { name: 'l2optim', color: 'GREEN', permissions: studentP
 const l3optimRoleData = { name: 'l3optim', color: 'GREEN', permissions: studentPerm }; // student
 const l2isiRoleData = { name: 'l2isi', color: 'GREEN', permissions: studentPerm }; // student
 const l3isiRoleData = { name: 'l3isi', color: 'GREEN', permissions: studentPerm }; // student
-// const delegateRoleData = { name: 'délégué', color: 'LUMINOUS_VIVID_PINK', permissions: studentPerm }; // student
-const delegateRoleData = { name: 'délégué', color: 'GREEN', permissions: studentPerm }; // student
+const delegateRoleData = { name: 'délégué', color: 'LUMINOUS_VIVID_PINK', permissions: studentPerm }; // student
+// const delegateRoleData = { name: 'délégué', color: 'GREEN', permissions: studentPerm }; // student
 
 /* ********************************************************************* */
 /*                          BASIC ROUTINES                               */
