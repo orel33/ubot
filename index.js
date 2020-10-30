@@ -4,7 +4,8 @@
 // https://discord.js.org/#/docs/main/stable/general/welcome
 
 const Discord = require('discord.js');
-const client = new Discord.Client();
+// const client = new Discord.Client();
+const client = new Discord.Client({ fetchAllMembers: true });
 const fs = require("fs");
 
 /* ********************************************************************* */
@@ -451,9 +452,11 @@ function updateUsers(g) {
     // load registered users
     const registeredUsers = loadRegisteredUsers(filename);
 
-    g.members.fetch().catch(console.error);
+    console.log("fetching guild members");
+    await g.members.fetch().then().catch(console.error);
+    console.log("done!");
+
     g.members.cache.forEach(async member => {
-        // await member.fetch();
 
         // check special roles (continue with next member)
         if (member.id == g.me.id) return;
