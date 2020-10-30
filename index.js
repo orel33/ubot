@@ -455,7 +455,7 @@ async function updateUsers(g) {
     const registeredUsers = loadRegisteredUsers(filename);
 
     console.log("fetching guild members");
-    await g.members.fetch().catch(console.error); // FIXME: sync all ?
+    g.members.fetch().catch(console.error); // FIXME: sync all with await?
     console.log("done!");
 
     g.members.cache.forEach(async member => {
