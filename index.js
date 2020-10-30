@@ -454,9 +454,9 @@ function updateUsers(g) {
     // load registered users
     const registeredUsers = loadRegisteredUsers(filename);
 
-    console.log("fetching guild members");
+    // console.log("fetching guild members");
     // g.members.fetch().catch(console.error); // FIXME: sync all with await?
-    console.log("done!");
+    // console.log("done!");
 
     g.members.cache.forEach(async member => {
         await member.fetch().catch(console.error);
