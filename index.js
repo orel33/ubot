@@ -153,7 +153,7 @@ function getStat(g) {
     var nbAll = 0;
 
     g.members.cache.forEach(member => {
-        member.fetch();
+        member.fetch().catch(console.error);
         nbAll++;
         if (hasRole(g, member, "student")) nbStudents++;
         if (hasRole(g, member, "teacher")) nbTeachers++;
@@ -180,7 +180,7 @@ function getExtraStat(g) {
     var nbl3isi = 0;
 
     g.members.cache.forEach(member => {
-        member.fetch();
+        member.fetch().catch(console.error);
 
         if (hasRole(g, member, "student")) nbStudents++;
         else return;
@@ -237,7 +237,7 @@ function printRegisteredUsers(g, filename) {
 /* ********************************************************************* */
 
 function printRoles(g) {
-    g.roles.fetch();
+    g.roles.fetch().catch(console.error);
     g.roles.cache.forEach(role => {
         console.log("role:", role.id, ",", role.name, ",", role.permissions, ",", role.position, ",", role.color);
     });
@@ -246,9 +246,9 @@ function printRoles(g) {
 /* ********************************************************************* */
 
 function printUsers(g) {
-    g.members.fetch();
+    g.members.fetch().catch(console.error);
     g.members.cache.forEach(member => {
-        member.fetch();
+        // member.fetch();
         console.log("user:", member.id, ",", member.displayName, ",", member.roles.highest.name);
     });
 }
@@ -318,9 +318,9 @@ function sendPublicRegisteredMessage(member) {
 
 function resetUsers(g) {
     console.log("=> Reset users on server:", g.name);
-    g.members.fetch();
+    g.members.fetch().catch(console.error);
     g.members.cache.forEach(member => {
-        member.fetch();
+        // member.fetch();
         if (member.id == g.me.id) return; // skip bot
         member.roles.set([unverifiedRoleID]).catch(console.error); // TODO: add() or set() ?
         if (member.id != g.ownerID) member.setNickname(member.user.username).catch(console.error);
@@ -331,9 +331,9 @@ function resetUsers(g) {
 
 function kickUnverifiedUsers(g) {
     console.log("=> Kick all unverified users on server:", g.name);
-    g.members.fetch();
+    g.members.fetch().catch(console.error);
     g.members.cache.forEach(member => {
-        member.fetch();
+        // member.fetch();
         if (member.id == g.me.id) return; // skip bot
         if (member.id == g.ownerID) return; // skip owner
         const hasUnverifiedRole = hasRole(g, member, "unverified");
@@ -451,9 +451,9 @@ function updateUsers(g) {
     // load registered users
     const registeredUsers = loadRegisteredUsers(filename);
 
-    g.members.fetch();
+    g.members.fetch().catch(console.error);
     g.members.cache.forEach(async member => {
-        await member.fetch();
+        // await member.fetch();
 
         // check special roles (continue with next member)
         if (member.id == g.me.id) return;
