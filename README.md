@@ -65,23 +65,29 @@ screen -r
 
 Check your server has the following settings...
 
-* a channel: #welcome
-* a role `@student` with permission `xxx`
-* a role `@teacher` with permission `yyy`
-* a role `@everyone` (or `@unverified`) with the lowest permission `zzz` (only
-  read/write messages in `#welcome`)
+In pratice, you must first create by yourself a channel: `#welcome`, to welcome
+all incoming user that are not yet verified...
 
-*Warning*: check the *position* of each role : @everyone < @unverified < @student < @teacher < @ubot
+The following roles are automatically created/updated with right permissions...
 
-Basically, the bot should configure this role and permissions automatically!
+* a role `@student`
+* a role `@teacher`
+* a role `@everyone` (and `@unverified`) with few permissions (only read/write
+  messages in `#welcome`)
 
-The account verification is just based on a HTTPS / HTACCESS account registration to map *IDNum* (UBX accout) with Dicord account (or ID).
+Finally, you must check the *position* of each role : ```@everyone < @unverified
+< @student < @teacher < @ubot < @admin``` and move them if needed.
+
+The account verification is just based on a HTTPS / HTACCESS account
+registration to map *IDNum* (UBx account) with Dicord account (or ID). Each new
+user will automatically receive a *private* registration  message from *ubot*...
+but it is also possible to ask this message explicitly with command `!register`
+in the channel `#welcome`.
 
 ## TODO
 
-* add extra-roles in listing.json (@l2info, @l3info, @admin, ...) based on extra.json
-* use emoji 2️⃣ and￼3️⃣ in nickname...
-* add command `!kickunverified`
+* the bot should configure all channels, roles and permissions automatically...
+  but it will require *admin* privilege...
 
 ## Documentation
 
