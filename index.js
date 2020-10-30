@@ -446,14 +446,16 @@ async function updateUserNickname(g, member, userinfo) {
 
 /* ********************************************************************* */
 
-function updateUsers(g) {
+async function updateUsers(g) {
     console.log("=> Update users on server:", g.name);
+    console.log("total users", g.memberCount);
+    console.log("cached users", g.members.cache.size);
 
     // load registered users
     const registeredUsers = loadRegisteredUsers(filename);
 
     console.log("fetching guild members");
-    await g.members.fetch().then().catch(console.error);
+    await g.members.fetch().catch(console.error); // FIXME: sync all ?
     console.log("done!");
 
     g.members.cache.forEach(async member => {
