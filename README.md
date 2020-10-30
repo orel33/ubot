@@ -7,12 +7,18 @@ verification against University of Bordeaux IDNum.
 
 * First, create a Discord Server, named `<MYSERVER>` as for instance "Licence Info"
 * Then, create a Discord App: https://discord.com/developers/applications/
-* Add a bot user, with name: *ubot* and get your bot `<TOKEN>` and `CLIENTID`.
+* Add a bot user, with name: *ubot* and get your bot `<TOKEN>` and `<CLIENTID>`.
+* Check the two options *Privileged Gateway Intents* in the Bot section of
+  your App : *Presence Intent* & *Server Members Intent*.
 * Also, note your Dicord account ID : `<MYID>`.
-* Then, set all permissions for your bot with: https://discordapi.com/permissions.html
-* And click to the link provided in order to add it to your server... Accept it!
-* This link is just like this : https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot
-* Or like that with permissions : https://discord.com/oauth2/authorize?client_id=CLIENTID&scope=bot&permissions=2147483639 (all permissions, except admin = 2147483639)
+* Then, set all permissions for your bot with:
+  https://discordapi.com/permissions.html. And click to the link provided in
+  order to add it to your server... Accept it! This link is just like this :
+  https://discordapp.com/oauth2/authorize?client_id=CLIENTID&scope=bot or like
+  that with permissions :
+  https://discord.com/oauth2/authorize?client_id=CLIENTID&scope=bot&permissions=2147483639
+  (all permissions, except admin = 2147483639)
+
 * In the Discord settings of your server, check the role position of your bot,
   that must be higher than other role...
 * Run the bot server with `./run.sh` (or `./startbot.sh` for a persistent *screen* session)
@@ -66,14 +72,15 @@ screen -r
 Check your server has the following settings...
 
 In pratice, you must first create by yourself a channel: `#welcome`, to welcome
-all incoming user that are not yet verified...
+all incoming users that are not yet verified...
 
-The following roles are automatically created/updated with right permissions...
+The following roles are automatically created/updated with the right permissions...
 
 * a role `@student`
 * a role `@teacher`
-* a role `@everyone` (and `@unverified`) with few permissions (only read/write
-  messages in `#welcome`)
+* a role `@unverified` with few permissions (only read/write messages in
+  `#welcome`)
+* a temporary role `@everyone` with same permissions as `@unverified`
 
 Finally, you must check the *position* of each role : ```@everyone < @unverified
 < @student < @teacher < @ubot < @admin``` and move them if needed.

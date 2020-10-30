@@ -153,8 +153,8 @@ function getStat(g) {
     var nbUnverified = 0;
     var nbAll = 0;
 
-    g.members.cache.forEach(member => {
-        member.fetch().catch(console.error);
+    g.members.cache.forEach(async member => {
+        await member.fetch().catch(console.error);
         nbAll++;
         if (hasRole(g, member, "student")) nbStudents++;
         if (hasRole(g, member, "teacher")) nbTeachers++;
