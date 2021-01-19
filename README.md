@@ -93,8 +93,13 @@ in the channel `#welcome`.
 
 ## TODO
 
-* the bot should configure all channels, roles and permissions automatically...
+* The bot should configure all channels, roles and permissions automatically...
   but it will require *admin* privilege...
+* Use LDAP request in PHP to get user info...
+
+## BUGS
+
+* The Discord *username* must be 32 or fewer in length.
 
 ## Documentation
 
