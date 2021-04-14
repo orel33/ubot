@@ -428,9 +428,11 @@ async function updateUserExtraRole(g, member, userinfo) {
 /* ********************************************************************* */
 
 async function updateUserNickname(g, member, userinfo) {
-
+    maxlen = 30 // displayname is 32 chars max in Discord
     if (userinfo === undefined) return;
     var username = userinfo["username"];
+    if (username.length >= maxlen)
+        username = username.slice(0, maxlen - 1) + '…'
 
     if (hasRole(g, member, "teacher")) username += "🎓";
     if (g.name === "Licence Info") {
