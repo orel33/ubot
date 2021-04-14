@@ -153,8 +153,10 @@ function getStat(g) {
     var nbUnverified = 0;
     var nbAll = 0;
 
-    g.members.cache.forEach(async member => {
-        await member.fetch().catch(console.error);
+    // g.members.cache.forEach(async member => {
+    //     await member.fetch().catch(console.error);
+    g.members.cache.forEach(member => {
+        member.fetch().catch(console.error);
         nbAll++;
         if (hasRole(g, member, "student")) nbStudents++;
         if (hasRole(g, member, "teacher")) nbTeachers++;
@@ -207,7 +209,8 @@ function getExtraStat(g) {
     msg += `* L3 Isi: ${nbl3isi}\n`;
     msg += `* L2 Optim: ${nbl2optim}\n`;
     msg += `* L3 Optim: ${nbl3optim}\n`;
-    msg += `* Unknown: ${nbUnknown} / ${nbStudents}\n`;
+    msg += `* Unknown: ${nbUnknown}\n`;
+    // msg += `* Students: ${nbStudents}\n`;
     return msg;
 }
 
